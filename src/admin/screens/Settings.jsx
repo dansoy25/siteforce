@@ -3,10 +3,12 @@ import { useAdmin } from '../AdminShell'
 import { fetchSites, updateSiteRadius, fetchOrgSettings, fetchRoles, fetchOrganization, updateCompanyCode } from '../../lib/adminApi'
 import { Card } from '../ui'
 import { peso } from '../../lib/format'
+import { AddEmployeeModal, AddProjectModal, AddInventoryModal } from '../AddRecordModals'
 
 export default function Settings() {
-  const { flash } = useAdmin()
-  const [tab, setTab] = useState('company')
+  const { flash, profile } = useAdmin()
+  const [tab, setTab] = useState('manage')
+  const [modal, setModal] = useState(null) // 'employee' | 'project' | 'inventory'
   const [sites, setSites] = useState([])
   const [siteId, setSiteId] = useState('')
   const [radius, setRadius] = useState(120)
@@ -80,11 +82,20 @@ export default function Settings() {
   return (
     <div className="animate-fadeIn">
       <div className="inline-flex bg-[#f4f4f2] rounded-[10px] p-[3px] gap-[3px] mb-4 flex-wrap">
+        <Tab id="manage" label="Manage" />
         <Tab id="company" label="Company" />
         <Tab id="geofence" label="Geofence" />
         <Tab id="pay" label="Pay rules" />
         <Tab id="roles" label="Roles" />
       </div>
+
+      {tab === 'manage' && (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-[14px] max-w-[760px]">
+          <ManageCard icon="👷" title="Add employee" desc="Create a login account + 6-digit PIN for a new worker or admin." onClick={() => setModal('employee')} />
+          <ManageCard icon="🏗" title="Add project" desc="Register a new project site with status and progress." onClick={() => setModal('project')} />
+          <ManageCard icon="📦" title="Add inventory" desc="Add a stock item; status is computed from reorder level." onClick={() => setModal('inventory')} />
+        </div>
+      )}
 
       {tab === 'company' && (
         <Card className="p-[18px] max-w-[520px]">
@@ -184,7 +195,31 @@ export default function Settings() {
           ))}
         </Card>
       )}
+
+      {modal === 'employee' && (
+        <AddEmployeeModal profile={profile} sites={sites} flash={flash} onClose={() => setModal(null)} onDone={() => {}} />
+      )}
+      {modal === 'project' && (
+        <AddProjectModal profile={profile} sites={sites} flash={flash} onClose={() => setModal(null)} onDone={() => {}} />
+      )}
+      {modal === 'inventory' && (
+        <AddInventoryModal profile={profile} flash={flash} onClose={() => setModal(null)} onDone={() => {}} />
+      )}
     </div>
+  )
+}
+
+function ManageCard({ icon, title, desc, onClick }) {
+  return (
+    <button
+      onClick={onClick}
+      className="text-left bg-white rounded-[18px] p-[18px] shadow-[0_1px_3px_rgba(10,10,9,0.08)] hover:shadow-md transition border-none"
+    >
+      <div className="w-[42px] h-[42px] rounded-xl bg-orange-tint text-orange flex items-center justify-center text-xl mb-3">{icon}</div>
+      <div className="text-[15px] font-bold mb-1">{title}</div>
+      <div className="text-[13px] text-muted leading-snug">{desc}</div>
+      <div className="text-[13px] text-orange font-semibold mt-3">+ Open</div>
+    </button>
   )
 }
 

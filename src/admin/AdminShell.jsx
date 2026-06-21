@@ -137,8 +137,18 @@ export default function AdminShell() {
           <div className="text-[13px] font-semibold truncate">{profile.full_name}</div>
           <div className="text-[11px] text-faint truncate">{profile.position}</div>
         </div>
-        <button onClick={signOut} title="Sign out" className="border-none bg-transparent text-faint text-base hover:text-red">⎋</button>
       </div>
+      <button
+        onClick={signOut}
+        className="mt-1 w-full border border-[#fce9e9] bg-[#fce9e9] text-red text-sm font-semibold py-[10px] rounded-[11px] flex items-center justify-center gap-2 hover:brightness-95 transition"
+      >
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+          <path d="M16 17l5-5-5-5" />
+          <path d="M21 12H9" />
+        </svg>
+        Log out
+      </button>
     </div>
   )
 
@@ -175,18 +185,6 @@ export default function AdminShell() {
             </div>
             <NotificationBell />
             <Avatar name={profile.full_name} size={38} color="#842b12" />
-            <button
-              onClick={signOut}
-              title="Log out"
-              aria-label="Log out"
-              className="border-none bg-[#f4f4f2] w-[38px] h-[38px] rounded-[11px] flex items-center justify-center hover:bg-[#fce9e9] hover:text-red transition-colors"
-            >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-                <path d="M16 17l5-5-5-5" />
-                <path d="M21 12H9" />
-              </svg>
-            </button>
           </div>
 
           <div className="flex-1 overflow-y-auto p-4 sm:p-6">{render()}</div>

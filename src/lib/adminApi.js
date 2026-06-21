@@ -214,6 +214,67 @@ export async function lockPayrollRun(id) {
   if (error) throw error
 }
 
+// ---------- Create records (admin) ----------
+export async function createProject(orgId, p) {
+  const { data, error } = await supabase
+    .from('projects')
+    .insert({
+      org_id: orgId,
+      name: p.name,
+      location: p.location || null,
+      site_id: p.site_id || null,
+      icon: p.icon || '🏗',
+      accent: p.accent || '#F25C1F',
+      status: p.status || 'active',
+      progress: Number(p.progress) || 0,
+      worker_count: Number(p.worker_count) || 0,
+    })
+    .select()
+    .single()
+  if (error) throw error
+  return data
+}
+
+export async function createInventoryItem(orgId, it) {
+  const stock = Number(it.stock) || 0
+  const reorder = Number(it.reorder_level) || 0
+  const status = stock <= 0 ? 'critical' : stock <= reorder ? 'low' : 'in_stock'
+  const { data, error } = await supabase
+    .from('inventory_items')
+    .insert({
+      org_id: orgId,
+      name: it.name,
+      sku: it.sku || null,
+      icon: it.icon || '📦',
+      stock,
+      capacity: Number(it.capacity) || Math.max(stock, 100),
+      unit: it.unit || 'pcs',
+      location: it.location || null,
+      reorder_level: reorder,
+      status,
+    })
+    .select()
+    .single()
+  if (error) throw error
+  return data
+}
+
+// Calls the secure Edge Function (service role) to create a real login + profile.
+export async function createEmployee(payload) {
+  const { data, error } = await supabase.functions.invoke('create-employee', { body: payload })
+  if (error) {
+    // Surface the function's JSON error message when present.
+    let msg = error.message
+    try {
+      const ctx = await error.context?.json?.()
+      if (ctx?.error) msg = ctx.error
+    } catch (_) {}
+    throw new Error(msg)
+  }
+  if (data?.error) throw new Error(data.error)
+  return data // { pin, employee_code, email }
+}
+
 // ---------- Roles / settings ----------
 export async function fetchRoles() {
   const { data, error } = await supabase.from('roles').select('*').order('sort')
