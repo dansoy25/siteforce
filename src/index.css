@@ -1,0 +1,93 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: 'Hanken Grotesk', system-ui, sans-serif;
+
+  --color-ink: #131312;
+  --color-ink-soft: #3a3a36;
+  --color-muted: #74746f;
+  --color-faint: #9b9b96;
+  --color-orange: #f25c1f;
+  --color-orange-dark: #d44712;
+  --color-orange-tint: #fff3ec;
+  --color-paper: #faf9f5;
+  --color-shell: #fafaf9;
+  --color-page: #e7e5e1;
+  --color-line: #f4f4f2;
+  --color-stroke: #dcdcd8;
+  --color-green: #1f9d6b;
+  --color-green-tint: #e7f6ef;
+  --color-blue: #3b6ff0;
+  --color-blue-tint: #e8eefe;
+  --color-amber: #e0982e;
+  --color-amber-tint: #fcf1df;
+  --color-red: #e04444;
+  --color-red-tint: #fce9e9;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  background: var(--color-page);
+  color: var(--color-ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+.tnum {
+  font-variant-numeric: tabular-nums;
+}
+
+/* hide scrollbars inside the phone shell but keep scrolling */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+@keyframes qrScan {
+  0% { top: 6%; }
+  50% { top: 82%; }
+  100% { top: 6%; }
+}
+@keyframes ringFill {
+  0% { stroke-dashoffset: 585; }
+  100% { stroke-dashoffset: 150; }
+}
+@keyframes blinkPrompt {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+@keyframes cornerPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+@keyframes pulseRing {
+  0% { transform: translate(-50%, -50%) scale(0.85); opacity: 0.6; }
+  100% { transform: translate(-50%, -50%) scale(1.35); opacity: 0; }
+}
+@keyframes toastIn {
+  from { opacity: 0; transform: translate(-50%, 12px); }
+  to { opacity: 1; transform: translate(-50%, 0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fadeIn {
+  animation: fadeIn 0.25s ease;
+}
+.animate-toastIn {
+  animation: toastIn 0.25s ease;
+}
