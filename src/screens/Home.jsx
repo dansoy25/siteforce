@@ -104,7 +104,7 @@ export default function Home() {
   return (
     <div className="flex flex-col animate-fadeIn">
       {/* orange header */}
-      <div className="bg-orange px-6 pt-[6px] pb-[26px] text-white">
+      <div className="bg-orange px-6 pt-6 pb-[26px] text-white">
         <div className="flex justify-between items-center">
           <div>
             <div className="text-sm opacity-85">Good morning</div>

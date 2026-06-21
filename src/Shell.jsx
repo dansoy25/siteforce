@@ -1,6 +1,5 @@
 import { createContext, useContext, useState, useCallback, useRef } from 'react'
 import PhoneFrame from './components/PhoneFrame'
-import StatusBar from './components/StatusBar'
 import BottomNav from './components/BottomNav'
 import Toast from './components/Toast'
 
@@ -43,16 +42,9 @@ export default function Shell() {
     toastTimer.current = setTimeout(() => setToast(''), 2600)
   }, [])
 
-  // Per-screen shell background + status bar styling (mirrors the prototype).
+  // Per-screen shell background.
   const inCheckin = screen === 'checkin'
-  let shellBg = '#fafaf9'
-  let statusFg = '#131312'
-  let statusBg
-
-  if (screen === 'home') {
-    statusFg = '#fff'
-    statusBg = '#f25c1f'
-  }
+  const shellBg = '#fafaf9'
 
   const ctx = { screen, params, navigate, flash }
 
@@ -95,7 +87,6 @@ export default function Shell() {
   return (
     <ShellContext.Provider value={ctx}>
       <PhoneFrame bg={shellBg}>
-        <StatusBar fg={statusFg} bg={statusBg} />
         <div className="flex-1 overflow-y-auto no-scrollbar flex flex-col">{render()}</div>
         {NAV_SCREENS.includes(screen) && (
           <BottomNav screen={screen} onNavigate={(k) => navigate(k)} />

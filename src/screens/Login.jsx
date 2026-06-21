@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import PhoneFrame from '../components/PhoneFrame'
-import StatusBar from '../components/StatusBar'
 import { useAuth } from '../context/AuthContext'
 
 const KEYS = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '', '0', 'del']
@@ -57,8 +56,7 @@ export default function Login() {
 
   return (
     <PhoneFrame bg="#fafaf9">
-      <StatusBar fg="#131312" />
-      <div className="flex-1 flex flex-col px-7 pt-[14px] pb-9 animate-fadeIn overflow-y-auto no-scrollbar">
+      <div className="flex-1 flex flex-col px-7 pt-9 pb-9 animate-fadeIn overflow-y-auto no-scrollbar">
         <div className="flex flex-col items-center mt-[14px] mb-[30px]">
           <div className="w-16 h-16 rounded-[20px] bg-orange flex items-center justify-center shadow-[0_8px_20px_rgba(242,92,31,0.34)] mb-[18px]">
             <span className="text-white text-[30px] font-extrabold">S</span>
