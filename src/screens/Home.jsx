@@ -6,9 +6,23 @@ import {
   fetchAttendance,
   fetchLeaveBalances,
   fetchAnnouncements,
+  fetchNotifications,
   clockOut,
+  logActivity,
 } from '../lib/api'
 import { initials, longDate, timePH, hm } from '../lib/format'
+
+const ACTIVITY_ICON = {
+  login: '🔓', logout: '🔒', clock_in: '🟢', clock_out: '⏹',
+  leave_request: '📅', leave_approved: '✅', leave_rejected: '⛔',
+}
+const timeAgo = (iso) => {
+  const s = Math.floor((Date.now() - new Date(iso).getTime()) / 1000)
+  if (s < 60) return 'just now'
+  if (s < 3600) return `${Math.floor(s / 60)}m ago`
+  if (s < 86400) return `${Math.floor(s / 3600)}h ago`
+  return `${Math.floor(s / 86400)}d ago`
+}
 
 export default function Home() {
   const { profile } = useAuth()
@@ -18,17 +32,20 @@ export default function Home() {
   const [weekHours, setWeekHours] = useState(0)
   const [leaveLeft, setLeaveLeft] = useState(0)
   const [announcements, setAnnouncements] = useState([])
+  const [activity, setActivity] = useState([])
   const [busy, setBusy] = useState(false)
 
   const load = useCallback(async () => {
     if (!profile) return
-    const [openRow, history, balances, anns] = await Promise.all([
+    const [openRow, history, balances, anns, acts] = await Promise.all([
       fetchOpenAttendance(profile.id),
       fetchAttendance(profile.id, 14),
       fetchLeaveBalances(profile.id),
       fetchAnnouncements(),
+      fetchNotifications(6),
     ])
     setOpen(openRow)
+    setActivity(acts)
 
     // hours this week (Mon..now)
     const now = new Date()
@@ -64,6 +81,13 @@ export default function Home() {
       setBusy(true)
       try {
         await clockOut(open.id, open.clock_in)
+        logActivity({
+          orgId: profile.org_id,
+          actorId: profile.id,
+          actorName: profile.full_name,
+          type: 'clock_out',
+          message: `${profile.full_name} clocked out`,
+        })
         flash('Clocked out at ' + timePH(new Date().toISOString()))
         await load()
       } catch (e) {
@@ -172,6 +196,25 @@ export default function Home() {
             ))}
           </div>
         </div>
+
+        {/* your recent activity */}
+        {activity.length > 0 && (
+          <div>
+            <div className="text-sm font-bold mb-[10px]">Your recent activity</div>
+            <div className="bg-white rounded-2xl shadow-[0_1px_3px_rgba(10,10,9,0.08)] overflow-hidden">
+              {activity.map((n, i) => (
+                <div
+                  key={n.id}
+                  className={'flex items-center gap-3 px-[14px] py-[11px] ' + (i < activity.length - 1 ? 'border-b border-line' : '')}
+                >
+                  <span className="text-base">{ACTIVITY_ICON[n.type] || '•'}</span>
+                  <div className="flex-1 text-[13px]">{n.message}</div>
+                  <div className="text-[11px] text-faint tnum whitespace-nowrap">{timeAgo(n.created_at)}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   )

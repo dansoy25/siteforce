@@ -1,7 +1,8 @@
-import { createContext, useContext, useState, useCallback, useRef } from 'react'
+import { createContext, useContext, useState, useCallback, useRef, useEffect } from 'react'
 import { useAuth } from '../context/AuthContext'
 import { Avatar } from './ui'
 import Toast from '../components/Toast'
+import NotificationBell from './NotificationBell'
 
 import Dashboard from './screens/Dashboard'
 import Attendance from './screens/Attendance'
@@ -172,11 +173,20 @@ export default function AdminShell() {
             <div className="hidden md:flex items-center gap-[10px] border-[1.5px] border-stroke rounded-[11px] px-[13px] py-2 w-[240px] text-faint text-[13px]">
               ⌕ Search…
             </div>
-            <div className="w-[38px] h-[38px] rounded-[11px] bg-[#f4f4f2] flex items-center justify-center relative">
-              🔔
-              <div className="absolute top-[7px] right-2 w-2 h-2 rounded-full bg-red border-2 border-[#f4f4f2]" />
-            </div>
+            <NotificationBell />
             <Avatar name={profile.full_name} size={38} color="#842b12" />
+            <button
+              onClick={signOut}
+              title="Log out"
+              aria-label="Log out"
+              className="border-none bg-[#f4f4f2] w-[38px] h-[38px] rounded-[11px] flex items-center justify-center hover:bg-[#fce9e9] hover:text-red transition-colors"
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                <path d="M16 17l5-5-5-5" />
+                <path d="M21 12H9" />
+              </svg>
+            </button>
           </div>
 
           <div className="flex-1 overflow-y-auto p-4 sm:p-6">{render()}</div>

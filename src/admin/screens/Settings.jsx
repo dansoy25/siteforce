@@ -1,18 +1,21 @@
 import { useEffect, useState } from 'react'
 import { useAdmin } from '../AdminShell'
-import { fetchSites, updateSiteRadius, fetchOrgSettings, fetchRoles } from '../../lib/adminApi'
+import { fetchSites, updateSiteRadius, fetchOrgSettings, fetchRoles, fetchOrganization, updateCompanyCode } from '../../lib/adminApi'
 import { Card } from '../ui'
 import { peso } from '../../lib/format'
 
 export default function Settings() {
   const { flash } = useAdmin()
-  const [tab, setTab] = useState('geofence')
+  const [tab, setTab] = useState('company')
   const [sites, setSites] = useState([])
   const [siteId, setSiteId] = useState('')
   const [radius, setRadius] = useState(120)
   const [settings, setSettings] = useState(null)
   const [roles, setRoles] = useState([])
+  const [org, setOrg] = useState(null)
+  const [code, setCode] = useState('')
   const [busy, setBusy] = useState(false)
+  const [codeBusy, setCodeBusy] = useState(false)
 
   useEffect(() => {
     fetchSites().then((s) => {
@@ -21,7 +24,23 @@ export default function Settings() {
     })
     fetchOrgSettings().then(setSettings)
     fetchRoles().then(setRoles)
+    fetchOrganization().then((o) => { setOrg(o); setCode(o?.code || '') })
   }, [])
+
+  async function saveCode() {
+    if (codeBusy || !org) return
+    setCodeBusy(true)
+    try {
+      const updated = await updateCompanyCode(org.id, code)
+      setOrg((o) => ({ ...o, code: updated.code }))
+      setCode(updated.code)
+      flash('Company code updated')
+    } catch (e) {
+      flash(e.message || 'Could not update company code')
+    } finally {
+      setCodeBusy(false)
+    }
+  }
 
   const site = sites.find((s) => s.id === siteId)
 
@@ -60,11 +79,44 @@ export default function Settings() {
 
   return (
     <div className="animate-fadeIn">
-      <div className="inline-flex bg-[#f4f4f2] rounded-[10px] p-[3px] gap-[3px] mb-4">
+      <div className="inline-flex bg-[#f4f4f2] rounded-[10px] p-[3px] gap-[3px] mb-4 flex-wrap">
+        <Tab id="company" label="Company" />
         <Tab id="geofence" label="Geofence" />
         <Tab id="pay" label="Pay rules" />
         <Tab id="roles" label="Roles" />
       </div>
+
+      {tab === 'company' && (
+        <Card className="p-[18px] max-w-[520px]">
+          <div className="text-[15px] font-bold mb-1">Company code</div>
+          <div className="text-[13px] text-muted mb-4">
+            Workers and admins must enter this code to sign in. Changing it means
+            everyone uses the new code on their next login.
+          </div>
+          <label className="text-xs font-semibold text-ink-soft mb-1.5 block">Code</label>
+          <div className="flex gap-2">
+            <input
+              type="text"
+              value={code}
+              onChange={(e) => setCode(e.target.value.toUpperCase())}
+              spellCheck={false}
+              className="flex-1 border-[1.5px] border-stroke rounded-[12px] px-3 py-[10px] text-sm font-semibold tnum uppercase outline-none focus:border-orange"
+            />
+            <button
+              onClick={saveCode}
+              disabled={codeBusy || !code.trim() || code.trim() === org?.code}
+              className="border-none bg-orange text-white text-sm font-semibold px-4 py-[10px] rounded-[12px] disabled:opacity-50"
+            >
+              {codeBusy ? 'Saving…' : 'Save'}
+            </button>
+          </div>
+          {org && (
+            <div className="text-xs text-faint mt-2">
+              Organization: <span className="font-semibold text-ink-soft">{org.name}</span>
+            </div>
+          )}
+        </Card>
+      )}
 
       {tab === 'geofence' && (
         <Card className="overflow-hidden flex flex-col" >

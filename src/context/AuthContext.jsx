@@ -1,6 +1,14 @@
 import { createContext, useContext, useEffect, useState, useCallback } from 'react'
 import { supabase } from '../lib/supabase'
-import { fetchProfile } from '../lib/api'
+import { fetchProfile, logActivity } from '../lib/api'
+
+// Thrown when the entered company code doesn't match the account's organization.
+export class CompanyCodeError extends Error {
+  constructor() {
+    super('company-code-mismatch')
+    this.name = 'CompanyCodeError'
+  }
+}
 
 const AuthContext = createContext(null)
 
@@ -42,27 +50,52 @@ export function AuthProvider({ children }) {
     }
   }, [loadProfile])
 
-  // Sign in with company email + 6-digit PIN (PIN is the account password).
-  const signInWithPin = useCallback(async (email, pin) => {
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password: pin,
-    })
+  // Sign in with a company code gate. `password` is the 6-digit PIN for
+  // employees, or the account password for admins. The company code must match
+  // the account's organization, otherwise we immediately sign back out.
+  const signIn = useCallback(async (email, password, companyCode) => {
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password })
     if (error) throw error
+
+    // Verify the company code against the account's org (session is now active).
+    const p = await fetchProfile(data.user.id)
+    const entered = (companyCode || '').trim().toUpperCase()
+    const actual = (p?.organization?.code || '').toUpperCase()
+    if (!entered || entered !== actual) {
+      await supabase.auth.signOut()
+      throw new CompanyCodeError()
+    }
+
+    setProfile(p)
+    logActivity({
+      orgId: p.org_id,
+      actorId: p.id,
+      actorName: p.full_name,
+      type: 'login',
+    })
     return data
   }, [])
 
+  // Back-compat alias (employee PIN sign-in).
+  const signInWithPin = signIn
+
   const signOut = useCallback(async () => {
+    // Best-effort logout event before the session is torn down.
+    if (profile) {
+      await logActivity({
+        orgId: profile.org_id,
+        actorId: profile.id,
+        actorName: profile.full_name,
+        type: 'logout',
+      })
+    }
     await supabase.auth.signOut()
     setProfile(null)
-  }, [])
+  }, [profile])
 
   const refreshProfile = useCallback(async () => {
     if (session?.user) await loadProfile(session.user.id)
   }, [session, loadProfile])
-
-  // Generic email + password sign-in (used by the web admin console).
-  const signIn = signInWithPin
 
   return (
     <AuthContext.Provider

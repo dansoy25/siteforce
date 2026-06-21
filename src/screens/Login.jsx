@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import PhoneFrame from '../components/PhoneFrame'
 import StatusBar from '../components/StatusBar'
 import { useAuth } from '../context/AuthContext'
@@ -6,26 +6,39 @@ import { useAuth } from '../context/AuthContext'
 const KEYS = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '', '0', 'del']
 
 export default function Login() {
-  const { signInWithPin } = useAuth()
-  const [companyCode] = useState('SAN-ANT')
+  const { signIn } = useAuth()
+  const [companyCode, setCompanyCode] = useState('')
   const [email, setEmail] = useState('')
   const [pin, setPin] = useState('')
   const [error, setError] = useState('')
   const [busy, setBusy] = useState(false)
 
+  const ready = companyCode.trim() && email.trim()
+
   async function attempt(nextPin) {
     setBusy(true)
     setError('')
     try {
-      await signInWithPin(email.trim(), nextPin)
+      await signIn(email.trim(), nextPin, companyCode)
       // success — AuthProvider flips the app to the shell
     } catch (e) {
-      setError('Incorrect PIN. Try again.')
+      setError(
+        e?.name === 'CompanyCodeError'
+          ? "Company code doesn't match this account."
+          : 'Incorrect company code, email, or PIN.'
+      )
       setPin('')
     } finally {
       setBusy(false)
     }
   }
+
+  // Auto-submit once 6 digits are entered (kept out of the setState updater so
+  // React StrictMode's double-invocation can't trigger a double sign-in).
+  useEffect(() => {
+    if (pin.length === 6 && !busy) attempt(pin)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pin])
 
   function press(k) {
     if (busy) return
@@ -35,12 +48,11 @@ export default function Login() {
       return
     }
     if (k === '') return
-    setPin((p) => {
-      if (p.length >= 6) return p
-      const next = p + k
-      if (next.length === 6) attempt(next)
-      return next
-    })
+    if (!ready) {
+      setError('Enter your company code and email first.')
+      return
+    }
+    setPin((p) => (p.length >= 6 ? p : p + k))
   }
 
   return (
@@ -56,13 +68,19 @@ export default function Login() {
         </div>
 
         <div className="flex flex-col gap-3 mb-6">
-          <div className="border-[1.5px] border-stroke rounded-[14px] px-[15px] py-[13px] text-sm text-muted bg-white flex justify-between">
-            Company code <span className="text-ink font-semibold">{companyCode}</span>
-          </div>
+          <input
+            type="text"
+            value={companyCode}
+            onChange={(e) => { setCompanyCode(e.target.value); setError('') }}
+            placeholder="Company code (e.g. SAN-ANT)"
+            spellCheck={false}
+            autoCapitalize="characters"
+            className="border-[1.5px] border-stroke rounded-[14px] px-[15px] py-[13px] text-sm text-ink bg-white outline-none focus:border-orange placeholder:text-faint uppercase"
+          />
           <input
             type="email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => { setEmail(e.target.value); setError('') }}
             placeholder="you@company.ph"
             spellCheck={false}
             autoCapitalize="none"

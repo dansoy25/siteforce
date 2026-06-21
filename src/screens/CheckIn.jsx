@@ -2,7 +2,7 @@ import { useEffect, useRef, useState, useCallback } from 'react'
 import { BrowserQRCodeReader } from '@zxing/browser'
 import { useAuth } from '../context/AuthContext'
 import { useShell } from '../Shell'
-import { fetchSiteByQr, clockIn } from '../lib/api'
+import { fetchSiteByQr, clockIn, logActivity } from '../lib/api'
 import { distanceMeters, getCurrentPosition } from '../lib/geo'
 import { timePH } from '../lib/format'
 
@@ -88,6 +88,13 @@ export default function CheckIn() {
                 method: 'Face + GPS',
               })
               setClockInAt(row.clock_in)
+              logActivity({
+                orgId: profile.org_id,
+                actorId: profile.id,
+                actorName: profile.full_name,
+                type: 'clock_in',
+                message: `${profile.full_name} clocked in at ${site?.name || 'site'}`,
+              })
             } catch (e) {
               flash('Could not save check-in')
             } finally {

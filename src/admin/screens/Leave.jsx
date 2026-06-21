@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback } from 'react'
 import { useAdmin } from '../AdminShell'
 import { fetchLeaveQueue, decideLeave } from '../../lib/adminApi'
+import { logActivity } from '../../lib/api'
 import { Card, Avatar, Pill } from '../ui'
 import { shortDate } from '../../lib/format'
 
@@ -19,7 +20,15 @@ export default function Leave() {
   async function decide(id, decision) {
     setBusy(id)
     try {
+      const req = rows.find((r) => r.id === id)
       await decideLeave(id, decision, profile.full_name, decision === 'rejected' ? 'Reviewed by admin.' : null)
+      logActivity({
+        orgId: profile.org_id,
+        actorId: profile.id,
+        actorName: profile.full_name,
+        type: decision === 'approved' ? 'leave_approved' : 'leave_rejected',
+        message: `${profile.full_name} ${decision} ${req?.profile?.full_name || 'a worker'}'s leave`,
+      })
       flash(decision === 'approved' ? 'Leave approved' : 'Leave rejected')
       load()
     } catch (e) {

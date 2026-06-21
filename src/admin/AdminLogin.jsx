@@ -3,6 +3,7 @@ import { useAuth } from '../context/AuthContext'
 
 export default function AdminLogin() {
   const { signIn } = useAuth()
+  const [companyCode, setCompanyCode] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
@@ -13,9 +14,13 @@ export default function AdminLogin() {
     setBusy(true)
     setError('')
     try {
-      await signIn(email.trim(), password)
+      await signIn(email.trim(), password, companyCode)
     } catch (err) {
-      setError('Invalid email or password.')
+      setError(
+        err?.name === 'CompanyCodeError'
+          ? "Company code doesn't match this account."
+          : 'Invalid company code, email, or password.'
+      )
     } finally {
       setBusy(false)
     }
@@ -62,6 +67,16 @@ export default function AdminLogin() {
           <div className="text-[15px] text-muted mt-1.5 mb-8">Sign in to the admin console.</div>
 
           <form onSubmit={submit}>
+            <label className="text-[13px] font-semibold text-ink-soft mb-1.5 block">Company code</label>
+            <input
+              type="text"
+              value={companyCode}
+              onChange={(e) => setCompanyCode(e.target.value)}
+              autoCapitalize="characters"
+              spellCheck={false}
+              placeholder="e.g. SAN-ANT"
+              className="w-full border-[1.5px] border-stroke rounded-[14px] px-4 py-[14px] text-[15px] mb-[18px] outline-none focus:border-orange placeholder:text-faint uppercase"
+            />
             <label className="text-[13px] font-semibold text-ink-soft mb-1.5 block">Work email</label>
             <input
               type="email"

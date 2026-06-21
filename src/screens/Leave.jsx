@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useAuth } from '../context/AuthContext'
 import { useShell } from '../Shell'
-import { fetchLeaveBalances, fetchLeaveTypes, submitLeave } from '../lib/api'
+import { fetchLeaveBalances, fetchLeaveTypes, submitLeave, logActivity } from '../lib/api'
 
 function daysBetween(from, to) {
   if (!from || !to) return 1
@@ -42,6 +42,13 @@ export default function Leave() {
         to,
         days: daysBetween(from, to),
         reason,
+      })
+      logActivity({
+        orgId: profile.org_id,
+        actorId: profile.id,
+        actorName: profile.full_name,
+        type: 'leave_request',
+        message: `${profile.full_name} requested leave`,
       })
       flash('Leave request submitted')
       navigate('requests')

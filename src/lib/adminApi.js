@@ -226,3 +226,23 @@ export async function fetchOrgSettings() {
   if (error) throw error
   return data
 }
+
+// ---------- Organization (company code) ----------
+export async function fetchOrganization() {
+  const { data, error } = await supabase.from('organizations').select('*').maybeSingle()
+  if (error) throw error
+  return data
+}
+
+export async function updateCompanyCode(orgId, code) {
+  const clean = (code || '').trim().toUpperCase()
+  if (!clean) throw new Error('Company code cannot be empty.')
+  const { data, error } = await supabase
+    .from('organizations')
+    .update({ code: clean })
+    .eq('id', orgId)
+    .select('id, code')
+  if (error) throw error
+  if (!data || data.length === 0) throw new Error('Not permitted to change the company code.')
+  return data[0]
+}

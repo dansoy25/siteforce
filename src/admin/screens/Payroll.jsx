@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useAdmin } from '../AdminShell'
 import { fetchPayrollRun, lockPayrollRun } from '../../lib/adminApi'
+import { logActivity } from '../../lib/api'
 import { Card, Avatar } from '../ui'
 import { peso } from '../../lib/format'
 
@@ -19,7 +20,7 @@ function Step({ n, label, state }) {
 }
 
 export default function Payroll() {
-  const { navigate, flash } = useAdmin()
+  const { navigate, flash, profile } = useAdmin()
   const [data, setData] = useState(null)
   const [locked, setLocked] = useState(false)
   const [busy, setBusy] = useState(false)
@@ -39,6 +40,13 @@ export default function Payroll() {
     setBusy(true)
     try {
       await lockPayrollRun(data.run.id)
+      logActivity({
+        orgId: profile.org_id,
+        actorId: profile.id,
+        actorName: profile.full_name,
+        type: 'payroll_locked',
+        message: `${profile.full_name} locked the payroll run`,
+      })
       setLocked(true)
       flash('Payroll run approved & locked')
     } catch (e) {

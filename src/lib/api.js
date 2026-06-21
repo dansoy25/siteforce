@@ -149,6 +149,45 @@ export async function fetchPayslips(profileId) {
   return data
 }
 
+// ---- Activity log / notifications ----
+const ACTIVITY_TEXT = {
+  login: 'signed in',
+  logout: 'signed out',
+  clock_in: 'clocked in',
+  clock_out: 'clocked out',
+  leave_request: 'requested leave',
+  leave_approved: 'approved a leave request',
+  leave_rejected: 'rejected a leave request',
+  payroll_locked: 'locked a payroll run',
+}
+
+// Records an activity event. Best-effort: never throw into the UI flow.
+export async function logActivity({ orgId, actorId, actorName, type, message }) {
+  if (!orgId || !actorId) return
+  try {
+    await supabase.from('notifications').insert({
+      org_id: orgId,
+      actor_id: actorId,
+      actor_name: actorName,
+      type,
+      message: message || `${actorName || 'Someone'} ${ACTIVITY_TEXT[type] || type}`,
+    })
+  } catch (e) {
+    console.warn('logActivity failed', e)
+  }
+}
+
+// RLS decides scope: admins get org-wide, employees get their own.
+export async function fetchNotifications(limit = 20) {
+  const { data, error } = await supabase
+    .from('notifications')
+    .select('*')
+    .order('created_at', { ascending: false })
+    .limit(limit)
+  if (error) throw error
+  return data
+}
+
 // ---- Announcements ----
 export async function fetchAnnouncements() {
   const { data, error } = await supabase
