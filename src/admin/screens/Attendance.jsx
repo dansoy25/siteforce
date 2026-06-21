@@ -56,7 +56,7 @@ export default function Attendance() {
                 <div className="flex flex-col gap-[10px]">
                   {people.map((p) => (
                     <div key={p.id} className="flex items-center gap-[10px]">
-                      <Avatar name={p.profile?.full_name} size={30} />
+                      <Avatar name={p.profile?.full_name} src={p.profile?.avatar_url} size={30} />
                       <div className="flex-1 text-[13px] font-semibold">{p.profile?.full_name}</div>
                       <span className="tnum text-xs" style={{ color: p.status === 'late' ? '#e0982e' : '#74746f' }}>
                         {timePH(p.clock_in)}
@@ -79,7 +79,7 @@ export default function Attendance() {
           {rows.map((r) => (
             <div key={r.id} className="grid grid-cols-2 sm:grid-cols-[2fr_1.4fr_1.2fr_1fr_1fr] items-center px-5 py-[13px] border-b border-line text-sm gap-y-1">
               <div className="flex items-center gap-[10px] col-span-2 sm:col-span-1">
-                <Avatar name={r.profile?.full_name} size={30} />
+                <Avatar name={r.profile?.full_name} src={r.profile?.avatar_url} size={30} />
                 <span className="font-semibold">{r.profile?.full_name}</span>
               </div>
               <div className="text-ink-soft">{r.site?.name || '—'}</div>

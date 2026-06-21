@@ -1,20 +1,4 @@
-import { initials, avatarColor } from '../lib/format'
-
-export function Avatar({ name, size = 34, color }) {
-  return (
-    <div
-      className="rounded-full text-white flex items-center justify-center font-bold shrink-0"
-      style={{
-        width: size,
-        height: size,
-        background: color || avatarColor(name),
-        fontSize: size * 0.36,
-      }}
-    >
-      {initials(name)}
-    </div>
-  )
-}
+export { default as Avatar } from '../components/Avatar'
 
 const STATUS = {
   present: { bg: '#e7f6ef', fg: '#1f9d6b', label: 'Present' },

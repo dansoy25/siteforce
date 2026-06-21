@@ -15,7 +15,7 @@ export async function fetchDashboard() {
       supabase.from('attendance').select('id, status, profile_id').eq('work_date', today),
       supabase
         .from('leave_requests')
-        .select('id, status, date_from, date_to, days, reason, profile:profiles(full_name, position, site:sites(name)), leave_type:leave_types(name, color)')
+        .select('id, status, date_from, date_to, days, reason, profile:profiles(full_name, position, avatar_url, site:sites(name)), leave_type:leave_types(name, color)')
         .eq('status', 'pending')
         .order('created_at', { ascending: false }),
       supabase.from('leave_requests').select('id, date_from, date_to').eq('status', 'approved'),
@@ -62,7 +62,7 @@ export async function fetchTodayAttendance() {
   const today = manilaToday()
   const { data, error } = await supabase
     .from('attendance')
-    .select('*, profile:profiles(full_name, position), site:sites(name)')
+    .select('*, profile:profiles(full_name, position, avatar_url), site:sites(name)')
     .eq('work_date', today)
     .order('clock_in', { ascending: true })
   if (error) throw error
@@ -89,7 +89,7 @@ export async function updateSiteRadius(siteId, radius) {
 export async function fetchLeaveQueue() {
   const { data, error } = await supabase
     .from('leave_requests')
-    .select('*, profile:profiles(full_name, position, site:sites(name)), leave_type:leave_types(name, color)')
+    .select('*, profile:profiles(full_name, position, avatar_url, site:sites(name)), leave_type:leave_types(name, color)')
     .order('created_at', { ascending: false })
   if (error) throw error
   return data
@@ -119,7 +119,7 @@ export async function fetchProject(id) {
   const today = manilaToday()
   const [{ data: project }, { data: members }, { data: inventory }] = await Promise.all([
     supabase.from('projects').select('*, site:sites(name)').eq('id', id).single(),
-    supabase.from('project_members').select('profile:profiles(id, full_name, position, daily_rate)').eq('project_id', id),
+    supabase.from('project_members').select('profile:profiles(id, full_name, position, daily_rate, avatar_url)').eq('project_id', id),
     supabase.from('inventory_items').select('*').limit(3),
   ])
   // today's status for each member
@@ -178,7 +178,7 @@ export async function fetchPayrollRun() {
   // Build a per-employee preview from rate + a representative attendance assumption.
   const { data: profiles } = await supabase
     .from('profiles')
-    .select('id, full_name, position, daily_rate, is_admin')
+    .select('id, full_name, position, daily_rate, is_admin, avatar_url')
     .eq('status', 'active')
   const { data: settings } = await supabase.from('org_settings').select('*').maybeSingle()
 

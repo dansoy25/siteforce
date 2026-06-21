@@ -55,7 +55,7 @@ export default function Leave() {
         {pending.map((r) => (
           <Card key={r.id} className="p-[18px]">
             <div className="flex gap-3 items-center mb-3">
-              <Avatar name={r.profile?.full_name} size={40} />
+              <Avatar name={r.profile?.full_name} src={r.profile?.avatar_url} size={40} />
               <div className="flex-1 min-w-0">
                 <div className="text-[15px] font-bold truncate">{r.profile?.full_name}</div>
                 <div className="text-[13px] text-muted truncate">{r.profile?.position} · {r.profile?.site?.name}</div>
@@ -88,7 +88,7 @@ export default function Leave() {
             <div className="text-[15px] font-bold mt-2">Recently decided</div>
             {rows.filter((r) => r.status !== 'pending').slice(0, 5).map((r) => (
               <Card key={r.id} className="p-4 flex items-center gap-3">
-                <Avatar name={r.profile?.full_name} size={34} />
+                <Avatar name={r.profile?.full_name} src={r.profile?.avatar_url} size={34} />
                 <div className="flex-1 min-w-0">
                   <div className="text-sm font-semibold truncate">{r.profile?.full_name} · {r.leave_type?.name?.replace(' leave', '')}</div>
                   <div className="text-xs text-faint tnum">{shortDate(r.date_from)} – {shortDate(r.date_to).replace(/^\w+ /, '')}</div>

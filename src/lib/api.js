@@ -149,6 +149,22 @@ export async function fetchPayslips(profileId) {
   return data
 }
 
+// ---- Avatars ----
+// Uploads a photo to the public 'avatars' bucket and saves it on the profile.
+export async function uploadAvatar(profileId, file) {
+  const ext = (file.name?.split('.').pop() || 'jpg').toLowerCase()
+  const path = `${profileId}/${Date.now()}.${ext}`
+  const { error: upErr } = await supabase.storage
+    .from('avatars')
+    .upload(path, file, { upsert: true, cacheControl: '3600', contentType: file.type || undefined })
+  if (upErr) throw upErr
+  const { data: pub } = supabase.storage.from('avatars').getPublicUrl(path)
+  const url = pub.publicUrl
+  const { error: updErr } = await supabase.from('profiles').update({ avatar_url: url }).eq('id', profileId)
+  if (updErr) throw updErr
+  return url
+}
+
 // ---- Activity log / notifications ----
 const ACTIVITY_TEXT = {
   login: 'signed in',
@@ -181,7 +197,7 @@ export async function logActivity({ orgId, actorId, actorName, type, message }) 
 export async function fetchNotifications(limit = 20) {
   const { data, error } = await supabase
     .from('notifications')
-    .select('*')
+    .select('*, actor:profiles(avatar_url)')
     .order('created_at', { ascending: false })
     .limit(limit)
   if (error) throw error

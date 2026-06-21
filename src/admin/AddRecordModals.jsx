@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import Modal, { Field, inputCls } from './Modal'
+import Avatar from '../components/Avatar'
 import { createEmployee, createProject, createInventoryItem } from '../lib/adminApi'
-import { logActivity } from '../lib/api'
+import { logActivity, uploadAvatar } from '../lib/api'
 
 /* ----------------------- Add Employee ----------------------- */
 export function AddEmployeeModal({ profile, sites, onClose, onDone, flash }) {
@@ -12,7 +13,17 @@ export function AddEmployeeModal({ profile, sites, onClose, onDone, flash }) {
   const [busy, setBusy] = useState(false)
   const [err, setErr] = useState('')
   const [result, setResult] = useState(null) // { pin, employee_code, email }
+  const [photo, setPhoto] = useState(null) // File
+  const [photoPreview, setPhotoPreview] = useState('')
+  const fileRef = useRef(null)
   const set = (k) => (e) => setF((s) => ({ ...s, [k]: e.target.type === 'checkbox' ? e.target.checked : e.target.value }))
+
+  function pickPhoto(e) {
+    const file = e.target.files?.[0]
+    if (!file) return
+    setPhoto(file)
+    setPhotoPreview(URL.createObjectURL(file))
+  }
 
   async function submit() {
     if (busy) return
@@ -24,6 +35,9 @@ export function AddEmployeeModal({ profile, sites, onClose, onDone, flash }) {
         daily_rate: f.daily_rate, site_id: f.site_id || null, schedule: f.schedule,
         phone: f.phone, is_admin: f.is_admin,
       })
+      if (photo && res?.id) {
+        try { await uploadAvatar(res.id, photo) } catch (_) {}
+      }
       setResult(res)
       logActivity({ orgId: profile.org_id, actorId: profile.id, actorName: profile.full_name,
         type: 'employee_added', message: `${profile.full_name} added employee ${f.full_name}` })
@@ -59,6 +73,15 @@ export function AddEmployeeModal({ profile, sites, onClose, onDone, flash }) {
           <button onClick={submit} disabled={busy} className="flex-1 border-none bg-orange text-white text-sm font-semibold py-[11px] rounded-xl disabled:opacity-60">{busy ? 'Creating…' : 'Create employee'}</button>
         </div>
       }>
+      <div className="flex items-center gap-3 mb-3">
+        <button type="button" onClick={() => fileRef.current?.click()} className="border-none bg-transparent p-0 rounded-full" title="Add photo">
+          <Avatar name={f.full_name || '?'} src={photoPreview} size={56} />
+        </button>
+        <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={pickPhoto} />
+        <button type="button" onClick={() => fileRef.current?.click()} className="text-[13px] text-orange font-semibold border-none bg-transparent">
+          {photo ? 'Change photo' : 'Add photo (optional)'}
+        </button>
+      </div>
       <Field label="Full name"><input className={inputCls} value={f.full_name} onChange={set('full_name')} placeholder="Juan dela Cruz" /></Field>
       <Field label="Email"><input className={inputCls} type="email" value={f.email} onChange={set('email')} placeholder="juan@company.ph" autoCapitalize="none" /></Field>
       <div className="grid grid-cols-2 gap-3">

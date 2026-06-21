@@ -132,7 +132,7 @@ export default function AdminShell() {
       <div className="flex-1" />
       <SidebarItem item={{ key: 'settings', label: 'Settings' }} />
       <div className="flex items-center gap-[10px] px-2 py-3 mt-2 border-t border-line">
-        <Avatar name={profile.full_name} size={34} color="#842b12" />
+        <Avatar name={profile.full_name} src={profile.avatar_url} size={34} color="#842b12" />
         <div className="flex-1 min-w-0">
           <div className="text-[13px] font-semibold truncate">{profile.full_name}</div>
           <div className="text-[11px] text-faint truncate">{profile.position}</div>
@@ -184,7 +184,7 @@ export default function AdminShell() {
               ⌕ Search…
             </div>
             <NotificationBell />
-            <Avatar name={profile.full_name} size={38} color="#842b12" />
+            <Avatar name={profile.full_name} src={profile.avatar_url} size={38} color="#842b12" />
           </div>
 
           <div className="flex-1 overflow-y-auto p-4 sm:p-6">{render()}</div>

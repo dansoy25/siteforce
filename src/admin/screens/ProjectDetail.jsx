@@ -50,7 +50,7 @@ export default function ProjectDetail() {
           <div className="px-5 py-4 border-b border-line text-[15px] font-bold">Assigned members</div>
           {members.map((m) => (
             <div key={m.id} className="flex items-center gap-3 px-5 py-3 border-b border-line last:border-0">
-              <Avatar name={m.full_name} size={34} />
+              <Avatar name={m.full_name} src={m.avatar_url} size={34} />
               <div className="flex-1 min-w-0">
                 <div className="text-sm font-semibold truncate">{m.full_name}</div>
                 <div className="text-xs text-faint tnum">{m.position} · {peso(m.daily_rate)}/day</div>

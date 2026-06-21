@@ -1,13 +1,32 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { useAuth } from '../context/AuthContext'
 import { useShell } from '../Shell'
-import { updateProfile } from '../lib/api'
+import { updateProfile, uploadAvatar } from '../lib/api'
 import { initials, peso } from '../lib/format'
+import Avatar from '../components/Avatar'
 
 export default function Profile() {
   const { profile, signOut, refreshProfile } = useAuth()
   const { flash } = useShell()
   const [notif, setNotif] = useState(profile.notifications_enabled)
+  const [uploading, setUploading] = useState(false)
+  const fileRef = useRef(null)
+
+  async function onPickPhoto(e) {
+    const file = e.target.files?.[0]
+    e.target.value = ''
+    if (!file) return
+    setUploading(true)
+    try {
+      await uploadAvatar(profile.id, file)
+      await refreshProfile()
+      flash('Photo updated')
+    } catch (err) {
+      flash('Could not upload photo')
+    } finally {
+      setUploading(false)
+    }
+  }
 
   async function toggleNotif() {
     const next = !notif
@@ -25,10 +44,23 @@ export default function Profile() {
   return (
     <div className="animate-fadeIn">
       <div className="px-[22px] pt-[14px] pb-[22px] flex flex-col items-center">
-        <div className="w-[84px] h-[84px] rounded-full bg-orange text-white flex items-center justify-center text-[30px] font-extrabold shadow-[0_8px_20px_rgba(242,92,31,0.3)]">
-          {initials(profile.full_name)}
-        </div>
-        <div className="text-xl font-extrabold mt-[14px]">{profile.full_name}</div>
+        <button onClick={() => fileRef.current?.click()} className="relative border-none bg-transparent p-0 rounded-full group shadow-[0_8px_20px_rgba(242,92,31,0.3)]" title="Change photo">
+          {profile.avatar_url ? (
+            <Avatar name={profile.full_name} src={profile.avatar_url} size={84} />
+          ) : (
+            <div className="w-[84px] h-[84px] rounded-full bg-orange text-white flex items-center justify-center text-[30px] font-extrabold">
+              {initials(profile.full_name)}
+            </div>
+          )}
+          <span className="absolute inset-0 rounded-full bg-black/40 text-white text-[11px] font-semibold flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
+            {uploading ? '…' : 'Change'}
+          </span>
+        </button>
+        <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={onPickPhoto} />
+        <button onClick={() => fileRef.current?.click()} disabled={uploading} className="text-[12px] text-orange font-semibold mt-2 border-none bg-transparent">
+          {uploading ? 'Uploading…' : profile.avatar_url ? 'Change photo' : 'Add photo'}
+        </button>
+        <div className="text-xl font-extrabold mt-[10px]">{profile.full_name}</div>
         <div className="text-[13px] text-muted">
           {profile.position} · {profile.employee_code}
         </div>

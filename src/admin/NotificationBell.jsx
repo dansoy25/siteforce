@@ -80,7 +80,7 @@ export default function NotificationBell() {
             {items.map((n) => (
               <div key={n.id} className="flex items-start gap-3 px-4 py-[11px] border-b border-line last:border-0">
                 <div className="mt-0.5">
-                  <Avatar name={n.actor_name || '—'} size={30} />
+                  <Avatar name={n.actor_name || '—'} src={n.actor?.avatar_url} size={30} />
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="text-[13px] leading-snug">

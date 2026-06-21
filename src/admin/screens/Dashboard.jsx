@@ -99,7 +99,7 @@ export default function Dashboard() {
         {d.pending.length === 0 && <div className="text-sm text-muted py-4">No pending requests 🎉</div>}
         {d.pending.map((l, i) => (
           <div key={l.id} className={'flex items-center gap-3 py-[9px] ' + (i < d.pending.length - 1 ? 'border-b border-line' : '')}>
-            <Avatar name={l.profile?.full_name} size={32} />
+            <Avatar name={l.profile?.full_name} src={l.profile?.avatar_url} size={32} />
             <div className="flex-1 min-w-0">
               <div className="text-[13px] font-semibold truncate">{l.profile?.full_name} · {l.leave_type?.name?.replace(' leave', '')}</div>
               <div className="text-xs text-faint tnum">

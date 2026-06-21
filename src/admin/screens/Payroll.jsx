@@ -93,7 +93,7 @@ export default function Payroll() {
         {data.rows.map((r) => (
           <div key={r.id} className="grid grid-cols-2 md:grid-cols-[1.8fr_0.9fr_0.8fr_1fr_1fr_1fr] items-center px-5 py-[13px] border-b border-line last:border-0 text-sm gap-y-1">
             <div className="flex items-center gap-[10px] col-span-2 md:col-span-1">
-              <Avatar name={r.full_name} size={30} />
+              <Avatar name={r.full_name} src={r.avatar_url} size={30} />
               <span className="font-semibold">{r.full_name}</span>
             </div>
             <div className="tnum hidden md:block">{r.regH.toFixed(1)}</div>

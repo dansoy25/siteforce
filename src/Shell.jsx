@@ -1,5 +1,4 @@
 import { createContext, useContext, useState, useCallback, useRef } from 'react'
-import { useAuth } from './context/AuthContext'
 import PhoneFrame from './components/PhoneFrame'
 import StatusBar from './components/StatusBar'
 import BottomNav from './components/BottomNav'
@@ -28,7 +27,6 @@ const NAV_SCREENS = [
 ]
 
 export default function Shell() {
-  const { signOut } = useAuth()
   const [screen, setScreen] = useState('home')
   const [params, setParams] = useState({})
   const [toast, setToast] = useState('')
@@ -97,7 +95,7 @@ export default function Shell() {
   return (
     <ShellContext.Provider value={ctx}>
       <PhoneFrame bg={shellBg}>
-        <StatusBar fg={statusFg} bg={statusBg} onLogout={signOut} />
+        <StatusBar fg={statusFg} bg={statusBg} />
         <div className="flex-1 overflow-y-auto no-scrollbar flex flex-col">{render()}</div>
         {NAV_SCREENS.includes(screen) && (
           <BottomNav screen={screen} onNavigate={(k) => navigate(k)} />

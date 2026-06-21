@@ -11,6 +11,7 @@ import {
   logActivity,
 } from '../lib/api'
 import { initials, longDate, timePH, hm } from '../lib/format'
+import Avatar from '../components/Avatar'
 
 const ACTIVITY_ICON = {
   login: '🔓', logout: '🔒', clock_in: '🟢', clock_out: '⏹',
@@ -111,9 +112,13 @@ export default function Home() {
               {profile.full_name}
             </div>
           </div>
-          <div className="w-11 h-11 rounded-full bg-white/20 flex items-center justify-center font-bold">
-            {initials(profile.full_name)}
-          </div>
+          {profile.avatar_url ? (
+            <Avatar name={profile.full_name} src={profile.avatar_url} size={44} />
+          ) : (
+            <div className="w-11 h-11 rounded-full bg-white/20 flex items-center justify-center font-bold">
+              {initials(profile.full_name)}
+            </div>
+          )}
         </div>
         <div className="text-[13px] opacity-85 mt-[2px] tnum">{longDate(new Date())}</div>
       </div>
