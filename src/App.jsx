@@ -24,7 +24,7 @@ function NotAuthorized({ onSignOut }) {
         admin account.
       </div>
       <div className="flex gap-3">
-        <a href="/" className="px-4 py-2 rounded-xl bg-ink text-white text-sm font-semibold">
+        <a href={import.meta.env.BASE_URL} className="px-4 py-2 rounded-xl bg-ink text-white text-sm font-semibold">
           Employee app
         </a>
         <button onClick={onSignOut} className="px-4 py-2 rounded-xl border border-stroke text-sm font-semibold">
@@ -37,7 +37,8 @@ function NotAuthorized({ onSignOut }) {
 
 export default function App() {
   const { loading, session, profile, signOut } = useAuth()
-  const isAdminRoute = typeof window !== 'undefined' && window.location.pathname.startsWith('/admin')
+  // Works both locally (/admin) and under the GitHub Pages base (/siteforce/admin)
+  const isAdminRoute = typeof window !== 'undefined' && window.location.pathname.includes('/admin')
 
   if (loading) return <Splash />
 

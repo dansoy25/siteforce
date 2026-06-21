@@ -3,7 +3,7 @@ import { useAuth } from '../context/AuthContext'
 
 export default function AdminLogin() {
   const { signIn } = useAuth()
-  const [email, setEmail] = useState('rosa.delacruz@sanantonio.ph')
+  const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [busy, setBusy] = useState(false)
@@ -69,7 +69,8 @@ export default function AdminLogin() {
               onChange={(e) => setEmail(e.target.value)}
               autoCapitalize="none"
               spellCheck={false}
-              className="w-full border-[1.5px] border-stroke rounded-[14px] px-4 py-[14px] text-[15px] mb-[18px] outline-none focus:border-orange"
+              placeholder="you@company.ph"
+              className="w-full border-[1.5px] border-stroke rounded-[14px] px-4 py-[14px] text-[15px] mb-[18px] outline-none focus:border-orange placeholder:text-faint"
             />
             <label className="text-[13px] font-semibold text-ink-soft mb-1.5 block">Password</label>
             <input
@@ -80,7 +81,7 @@ export default function AdminLogin() {
               className="w-full border-[1.5px] border-stroke rounded-[14px] px-4 py-[14px] text-[15px] mb-2 outline-none focus:border-orange"
             />
             <div className="min-h-[20px] mb-3 text-[13px]" style={{ color: error ? '#e04444' : '#9b9b96' }}>
-              {error || 'Demo admin password: admin123'}
+              {error || 'Use your administrator account.'}
             </div>
             <button
               type="submit"
@@ -91,7 +92,7 @@ export default function AdminLogin() {
             </button>
           </form>
 
-          <a href="/" className="text-center text-[13px] text-muted mt-5 hover:text-orange">
+          <a href={import.meta.env.BASE_URL} className="text-center text-[13px] text-muted mt-5 hover:text-orange">
             ← Back to employee app
           </a>
         </div>

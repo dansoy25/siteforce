@@ -8,7 +8,7 @@ const KEYS = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '', '0', 'del']
 export default function Login() {
   const { signInWithPin } = useAuth()
   const [companyCode] = useState('SAN-ANT')
-  const [email, setEmail] = useState('maria.santos@sanantonio.ph')
+  const [email, setEmail] = useState('')
   const [pin, setPin] = useState('')
   const [error, setError] = useState('')
   const [busy, setBusy] = useState(false)
@@ -63,9 +63,10 @@ export default function Login() {
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            placeholder="you@company.ph"
             spellCheck={false}
             autoCapitalize="none"
-            className="border-[1.5px] border-stroke rounded-[14px] px-[15px] py-[13px] text-sm text-ink bg-white outline-none focus:border-orange"
+            className="border-[1.5px] border-stroke rounded-[14px] px-[15px] py-[13px] text-sm text-ink bg-white outline-none focus:border-orange placeholder:text-faint"
           />
         </div>
 
@@ -104,7 +105,7 @@ export default function Login() {
         </div>
 
         <div className="text-center text-xs mt-[18px] min-h-[18px]" style={{ color: error ? '#e04444' : '#9b9b96' }}>
-          {busy ? 'Verifying…' : error || 'Demo PIN for Maria Santos: 417417'}
+          {busy ? 'Verifying…' : error || 'Enter your company email and 6-digit PIN'}
         </div>
       </div>
     </PhoneFrame>

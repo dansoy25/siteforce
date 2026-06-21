@@ -42,28 +42,18 @@ VITE_SUPABASE_URL=https://YOUR-PROJECT.supabase.co
 VITE_SUPABASE_ANON_KEY=sb_publishable_...
 ```
 
-## Demo logins
+## Logins
 
-**Employee app** — open `/`:
-
-| Field        | Value                          |
-| ------------ | ------------------------------ |
-| Company code | `SAN-ANT` (display only)       |
-| Email        | `maria.santos@sanantonio.ph`   |
-| 6-digit PIN  | `417417`                       |
-
-**Web admin console** — open `/admin`:
-
-| Field    | Value                          |
-| -------- | ------------------------------ |
-| Email    | `rosa.delacruz@sanantonio.ph`  |
-| Password | `admin123`                     |
+- **Employee app** (`/`) — company email + 6-digit PIN.
+- **Web admin console** (`/admin`) — administrator email + password.
 
 Both use real Supabase `signInWithPassword` (for employees, the PIN *is* the
 password), so row-level security applies to every query afterwards. Only
-accounts with `profiles.is_admin = true` can enter the admin console. Other
-seeded employees (Jose Rizal, Andres Bonifacio, etc.) sign into the mobile app
-with their own 6-digit PINs.
+accounts with `profiles.is_admin = true` can enter the admin console.
+
+> Demo account credentials are **not** committed to this public repo. Ask the
+> project owner, or create your own users in Supabase Auth and add a matching
+> row in `public.profiles`.
 
 ## How the "native" steps work on the web
 
