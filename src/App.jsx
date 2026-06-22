@@ -1,16 +1,22 @@
 import { useAuth } from './context/AuthContext'
 import Login from './screens/Login'
 import Shell from './Shell'
+import BrandLogo from './components/BrandLogo'
 import AdminLogin from './admin/AdminLogin'
 import AdminShell from './admin/AdminShell'
 
 function Splash() {
   return (
     <div className="min-h-[100dvh] flex flex-col items-center justify-center bg-page">
-      <div className="w-[68px] h-[68px] rounded-[20px] bg-orange flex items-center justify-center text-[32px] font-extrabold text-white shadow-[0_10px_28px_rgba(242,92,31,0.32)]">
-        J
-      </div>
-      <div className="mt-4 text-sm text-muted">Loading Jaway Services…</div>
+      <BrandLogo
+        imgClass="max-h-[110px] w-auto object-contain"
+        fallback={
+          <div className="w-[68px] h-[68px] rounded-[20px] bg-orange flex items-center justify-center text-[32px] font-extrabold text-white shadow-[0_10px_28px_rgba(242,92,31,0.32)]">
+            J
+          </div>
+        }
+      />
+      <div className="mt-4 text-sm text-muted">Loading Jaway Construction Services…</div>
     </div>
   )
 }
