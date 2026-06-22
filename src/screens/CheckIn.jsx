@@ -126,7 +126,7 @@ function StepQR({ profile, onResolved, onError, error }) {
         const s = await fetchSiteByQr(payload)
         if (!s) {
           handledRef.current = false
-          onError('Unrecognized QR — not a SiteForce gate code.')
+          onError('Unrecognized QR — not a Jaway Services gate code.')
           return
         }
         onResolved(s)

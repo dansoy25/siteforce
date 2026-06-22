@@ -8,9 +8,9 @@ function Splash() {
   return (
     <div className="min-h-[100dvh] flex flex-col items-center justify-center bg-page">
       <div className="w-[68px] h-[68px] rounded-[20px] bg-orange flex items-center justify-center text-[32px] font-extrabold text-white shadow-[0_10px_28px_rgba(242,92,31,0.32)]">
-        S
+        J
       </div>
-      <div className="mt-4 text-sm text-muted">Loading SiteForce…</div>
+      <div className="mt-4 text-sm text-muted">Loading Jaway Services…</div>
     </div>
   )
 }

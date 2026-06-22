@@ -59,10 +59,12 @@ export default function Login() {
       <div className="flex-1 flex flex-col px-7 pt-9 pb-9 animate-fadeIn overflow-y-auto no-scrollbar">
         <div className="flex flex-col items-center mt-[14px] mb-[30px]">
           <div className="w-16 h-16 rounded-[20px] bg-orange flex items-center justify-center shadow-[0_8px_20px_rgba(242,92,31,0.34)] mb-[18px]">
-            <span className="text-white text-[30px] font-extrabold">S</span>
+            <span className="text-white text-[30px] font-extrabold">J</span>
           </div>
-          <div className="text-2xl font-extrabold tracking-tight">SiteForce</div>
-          <div className="text-sm text-muted mt-1">Enter your 6-digit PIN</div>
+          <div className="text-2xl font-extrabold tracking-tight text-center">Jaway Services Inc.</div>
+          <div className="text-sm font-semibold text-ink-soft mt-1">Word System</div>
+          <div className="text-xs text-faint mt-1">Designed and Developed By TingSync</div>
+          <div className="text-sm text-muted mt-4">Enter your 6-digit PIN</div>
         </div>
 
         <div className="flex flex-col gap-3 mb-6">

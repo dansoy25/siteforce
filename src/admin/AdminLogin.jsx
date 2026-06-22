@@ -33,8 +33,12 @@ export default function AdminLogin() {
         <div className="hidden lg:flex flex-1 relative flex-col justify-between p-12 text-white"
              style={{ background: 'radial-gradient(circle at 30% 20%, #2A2A27, #0A0A09)' }}>
           <div className="flex items-center gap-3">
-            <div className="w-[42px] h-[42px] rounded-[13px] bg-orange flex items-center justify-center text-[21px] font-extrabold">S</div>
-            <span className="text-xl font-extrabold">SiteForce</span>
+            <div className="w-[42px] h-[42px] rounded-[13px] bg-orange flex items-center justify-center text-[21px] font-extrabold">J</div>
+            <div className="leading-tight">
+              <div className="text-xl font-extrabold">Jaway Services Inc.</div>
+              <div className="text-[13px] font-semibold text-white/80">Word System</div>
+              <div className="text-[11px] text-white/45">Designed and Developed By TingSync</div>
+            </div>
           </div>
           <div>
             <div className="text-[34px] font-extrabold tracking-tight leading-tight max-w-[420px]">
@@ -54,14 +58,18 @@ export default function AdminLogin() {
               </div>
             </div>
           </div>
-          <div className="text-white/40 text-[13px]">© 2026 SiteForce Inc. · Iloilo City, PH</div>
+          <div className="text-white/40 text-[13px]">© 2026 Jaway Services Inc. · Iloilo City, PH</div>
         </div>
 
         {/* Form */}
         <div className="w-full lg:w-[480px] flex flex-col justify-center p-8 sm:p-14">
           <div className="flex items-center gap-3 mb-8 lg:hidden">
-            <div className="w-10 h-10 rounded-xl bg-orange flex items-center justify-center text-lg font-extrabold text-white">S</div>
-            <span className="text-lg font-extrabold">SiteForce</span>
+            <div className="w-10 h-10 rounded-xl bg-orange flex items-center justify-center text-lg font-extrabold text-white">J</div>
+            <div className="leading-tight">
+              <div className="text-lg font-extrabold">Jaway Services Inc.</div>
+              <div className="text-[12px] font-semibold text-ink-soft">Word System</div>
+              <div className="text-[10px] text-faint">Designed and Developed By TingSync</div>
+            </div>
           </div>
           <div className="text-[26px] font-extrabold tracking-tight">Welcome back</div>
           <div className="text-[15px] text-muted mt-1.5 mb-8">Sign in to the admin console.</div>

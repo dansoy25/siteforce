@@ -45,7 +45,7 @@ export default function Payslip() {
             <div className="flex gap-3 items-center">
               <div className="w-[42px] h-[42px] rounded-[11px] bg-orange flex items-center justify-center text-white text-xl font-extrabold">S</div>
               <div>
-                <div className="text-[17px] font-extrabold">SiteForce Construction Inc.</div>
+                <div className="text-[17px] font-extrabold">Jaway Services Inc.</div>
                 <div className="text-xs text-muted">Brgy. Mandurriao, Iloilo City · TIN 004-217-880-000</div>
               </div>
             </div>

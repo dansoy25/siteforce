@@ -125,8 +125,11 @@ export default function AdminShell() {
   const Sidebar = () => (
     <div className="w-[236px] bg-white border-r border-[#eaeae7] flex flex-col px-4 py-[22px] h-full shrink-0">
       <div className="flex items-center gap-[10px] px-2 pb-6">
-        <div className="w-9 h-9 rounded-[11px] bg-orange flex items-center justify-center text-white text-lg font-extrabold">S</div>
-        <span className="text-[17px] font-extrabold">SiteForce</span>
+        <div className="w-9 h-9 rounded-[11px] bg-orange flex items-center justify-center text-white text-lg font-extrabold shrink-0">J</div>
+        <div className="leading-tight min-w-0">
+          <div className="text-[15px] font-extrabold truncate">Jaway Services Inc.</div>
+          <div className="text-[10px] text-faint truncate">Word System · by TingSync</div>
+        </div>
       </div>
       {NAV.map((item) => <SidebarItem key={item.key} item={item} />)}
       <div className="flex-1" />
