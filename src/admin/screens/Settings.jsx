@@ -162,7 +162,7 @@ export default function Settings() {
                  backgroundSize: '38px 38px',
                }}>
             <div className="absolute top-1/2 left-1/2 rounded-full -translate-x-1/2 -translate-y-1/2"
-                 style={{ width: radius * 1.8, height: radius * 1.8, maxWidth: 360, maxHeight: 360, background: 'rgba(37,99,235,.12)', border: '2px solid #f25c1f' }} />
+                 style={{ width: radius * 1.8, height: radius * 1.8, maxWidth: 360, maxHeight: 360, background: 'rgba(37,99,235,.12)', border: '2px solid #2563eb' }} />
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-brand border-[3px] border-white" />
             <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-ink text-white text-[11px] font-semibold px-[9px] py-[5px] rounded-lg tnum">
               radius {radius} m

@@ -183,7 +183,7 @@ function StepQR({ profile, onResolved, onError, error }) {
         <div className="absolute top-0 right-0 w-[38px] h-[38px] border-t-4 border-r-4 border-brand rounded-tr-[10px]" style={{ animation: 'cornerPulse 1.6s infinite' }} />
         <div className="absolute bottom-0 left-0 w-[38px] h-[38px] border-b-4 border-l-4 border-brand rounded-bl-[10px]" style={{ animation: 'cornerPulse 1.6s infinite' }} />
         <div className="absolute bottom-0 right-0 w-[38px] h-[38px] border-b-4 border-r-4 border-brand rounded-br-[10px]" style={{ animation: 'cornerPulse 1.6s infinite' }} />
-        <div className="absolute left-[6%] right-[6%] h-[3px] bg-[#fa763a] rounded-full" style={{ boxShadow: '0 0 14px 3px rgba(250,118,58,.8)', animation: 'qrScan 2.4s ease-in-out infinite' }} />
+        <div className="absolute left-[6%] right-[6%] h-[3px] bg-[#3b82f6] rounded-full" style={{ boxShadow: '0 0 14px 3px rgba(59,130,246,.8)', animation: 'qrScan 2.4s ease-in-out infinite' }} />
       </div>
       <div className="text-white text-base font-semibold mt-8">Point at the site QR code</div>
       <div className="text-white/60 text-[13px] mt-[6px] text-center">
@@ -359,7 +359,7 @@ function StepFace({ onNext }) {
             rx="100"
             ry="125"
             fill="none"
-            stroke="#f25c1f"
+            stroke="#2563eb"
             strokeWidth="5"
             strokeLinecap="round"
             strokeDasharray="707"
