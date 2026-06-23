@@ -11,7 +11,7 @@ function Splash() {
       <BrandLogo
         imgClass="max-h-[110px] w-auto object-contain"
         fallback={
-          <div className="w-[68px] h-[68px] rounded-[20px] bg-orange flex items-center justify-center text-[32px] font-extrabold text-white shadow-[0_10px_28px_rgba(242,92,31,0.32)]">
+          <div className="w-[68px] h-[68px] rounded-[20px] bg-brand flex items-center justify-center text-[32px] font-extrabold text-white shadow-[0_10px_28px_rgba(37,99,235,0.32)]">
             J
           </div>
         }

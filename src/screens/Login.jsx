@@ -62,7 +62,7 @@ export default function Login() {
           <BrandLogo
             imgClass="max-h-[120px] w-auto object-contain mb-3"
             fallback={
-              <div className="w-16 h-16 rounded-[20px] bg-orange flex items-center justify-center shadow-[0_8px_20px_rgba(242,92,31,0.34)] mb-[18px]">
+              <div className="w-16 h-16 rounded-[20px] bg-brand flex items-center justify-center shadow-[0_8px_20px_rgba(37,99,235,0.34)] mb-[18px]">
                 <span className="text-white text-[30px] font-extrabold">J</span>
               </div>
             }
@@ -80,7 +80,7 @@ export default function Login() {
             placeholder="Company code (e.g. SAN-ANT)"
             spellCheck={false}
             autoCapitalize="characters"
-            className="border-[1.5px] border-stroke rounded-[14px] px-[15px] py-[13px] text-sm text-ink bg-white outline-none focus:border-orange placeholder:text-faint uppercase"
+            className="border-[1.5px] border-stroke rounded-[14px] px-[15px] py-[13px] text-sm text-ink bg-white outline-none focus:border-brand placeholder:text-faint uppercase"
           />
           <input
             type="email"
@@ -89,7 +89,7 @@ export default function Login() {
             placeholder="you@company.ph"
             spellCheck={false}
             autoCapitalize="none"
-            className="border-[1.5px] border-stroke rounded-[14px] px-[15px] py-[13px] text-sm text-ink bg-white outline-none focus:border-orange placeholder:text-faint"
+            className="border-[1.5px] border-stroke rounded-[14px] px-[15px] py-[13px] text-sm text-ink bg-white outline-none focus:border-brand placeholder:text-faint"
           />
         </div>
 
@@ -99,7 +99,7 @@ export default function Login() {
               key={i}
               className="w-[14px] h-[14px] rounded-full"
               style={{
-                background: i < pin.length ? '#f25c1f' : 'transparent',
+                background: i < pin.length ? '#2563eb' : 'transparent',
                 border: i < pin.length ? 'none' : '1.5px solid #c2c2bd',
               }}
             />

@@ -45,7 +45,7 @@ export default function Employees() {
             key={e.id}
             onClick={() => setSelected(e)}
             className="w-full text-left grid grid-cols-2 sm:grid-cols-[2fr_1.2fr_1fr_1fr] items-center px-[22px] py-[14px] border-b border-line last:border-0 text-sm gap-y-1"
-            style={selected?.id === e.id ? { background: '#fff3ec' } : undefined}
+            style={selected?.id === e.id ? { background: '#eff4ff' } : undefined}
           >
             <div className="flex items-center gap-[10px] col-span-2 sm:col-span-1">
               <Avatar name={e.full_name} src={e.avatar_url} size={34} />
@@ -73,7 +73,7 @@ export default function Employees() {
             <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={onPickPhoto} />
             <div className="text-lg font-extrabold mt-3">{selected.full_name}</div>
             <div className="text-[13px] text-muted">{selected.position} · {selected.employee_code}</div>
-            <button onClick={() => fileRef.current?.click()} disabled={uploading} className="text-[12px] text-orange font-semibold mt-1 border-none bg-transparent">
+            <button onClick={() => fileRef.current?.click()} disabled={uploading} className="text-[12px] text-brand font-semibold mt-1 border-none bg-transparent">
               {uploading ? 'Uploading…' : selected.avatar_url ? 'Change photo' : 'Add photo'}
             </button>
           </div>

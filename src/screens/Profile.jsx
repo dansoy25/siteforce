@@ -44,11 +44,11 @@ export default function Profile() {
   return (
     <div className="animate-fadeIn">
       <div className="px-[22px] pt-[14px] pb-[22px] flex flex-col items-center">
-        <button onClick={() => fileRef.current?.click()} className="relative border-none bg-transparent p-0 rounded-full group shadow-[0_8px_20px_rgba(242,92,31,0.3)]" title="Change photo">
+        <button onClick={() => fileRef.current?.click()} className="relative border-none bg-transparent p-0 rounded-full group shadow-[0_8px_20px_rgba(37,99,235,0.3)]" title="Change photo">
           {profile.avatar_url ? (
             <Avatar name={profile.full_name} src={profile.avatar_url} size={84} />
           ) : (
-            <div className="w-[84px] h-[84px] rounded-full bg-orange text-white flex items-center justify-center text-[30px] font-extrabold">
+            <div className="w-[84px] h-[84px] rounded-full bg-brand text-white flex items-center justify-center text-[30px] font-extrabold">
               {initials(profile.full_name)}
             </div>
           )}
@@ -57,7 +57,7 @@ export default function Profile() {
           </span>
         </button>
         <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={onPickPhoto} />
-        <button onClick={() => fileRef.current?.click()} disabled={uploading} className="text-[12px] text-orange font-semibold mt-2 border-none bg-transparent">
+        <button onClick={() => fileRef.current?.click()} disabled={uploading} className="text-[12px] text-brand font-semibold mt-2 border-none bg-transparent">
           {uploading ? 'Uploading…' : profile.avatar_url ? 'Change photo' : 'Add photo'}
         </button>
         <div className="text-xl font-extrabold mt-[10px]">{profile.full_name}</div>
@@ -99,7 +99,7 @@ export default function Profile() {
             <button
               onClick={toggleNotif}
               className="w-[42px] h-[26px] rounded-full relative transition-colors"
-              style={{ background: notif ? '#f25c1f' : '#dcdcd8' }}
+              style={{ background: notif ? '#2563eb' : '#dcdcd8' }}
               aria-pressed={notif}
             >
               <span

@@ -104,7 +104,7 @@ export default function Home() {
   return (
     <div className="flex flex-col animate-fadeIn">
       {/* orange header */}
-      <div className="bg-orange px-6 pt-6 pb-[26px] text-white">
+      <div className="bg-brand px-6 pt-6 pb-[26px] text-white">
         <div className="flex justify-between items-center">
           <div>
             <div className="text-sm opacity-85">Good morning</div>
@@ -160,7 +160,7 @@ export default function Home() {
             onClick={onClockAction}
             disabled={busy}
             className="w-full border-none text-white text-base font-semibold py-[15px] rounded-[14px] disabled:opacity-60"
-            style={{ background: clockedIn ? '#131312' : '#f25c1f' }}
+            style={{ background: clockedIn ? '#131312' : '#2563eb' }}
           >
             {busy ? '…' : clockedIn ? 'Clock out' : 'Clock in'}
           </button>
@@ -189,7 +189,7 @@ export default function Home() {
               >
                 <div
                   className="w-[34px] h-[34px] rounded-[10px] flex items-center justify-center shrink-0"
-                  style={{ background: (a.accent || '#f25c1f') + '22', color: a.accent || '#f25c1f' }}
+                  style={{ background: (a.accent || '#2563eb') + '22', color: a.accent || '#2563eb' }}
                 >
                   {a.icon}
                 </div>

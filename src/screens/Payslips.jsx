@@ -30,7 +30,7 @@ export default function Payslips() {
 
       {latest && (
         <div className="px-[18px] pb-[14px]">
-          <div className="rounded-[20px] p-[18px] text-white shadow-[0_8px_20px_rgba(242,92,31,0.3)] bg-gradient-to-br from-orange to-orange-dark">
+          <div className="rounded-[20px] p-[18px] text-white shadow-[0_8px_20px_rgba(37,99,235,0.3)] bg-gradient-to-br from-brand to-brand-dark">
             <div className="text-xs opacity-85 tracking-wide uppercase">Latest net pay</div>
             <div className="text-[32px] font-extrabold my-1 tnum">{peso(latest.net)}</div>
             <div className="text-[13px] opacity-85 tnum">

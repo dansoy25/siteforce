@@ -14,6 +14,7 @@ import Payroll from './screens/Payroll'
 import Payslip from './screens/Payslip'
 import Leave from './screens/Leave'
 import Employees from './screens/Employees'
+import Expenses from './screens/Expenses'
 import Settings from './screens/Settings'
 
 const AdminContext = createContext(null)
@@ -29,6 +30,7 @@ const TITLES = {
   payslip: 'Payslips',
   leave: 'Leave management',
   employees: 'Employees',
+  expenses: 'Expenses',
   settings: 'Settings',
 }
 
@@ -51,6 +53,8 @@ function NavIcon({ name, color }) {
       return (<svg {...c}><rect x="2" y="4" width="15" height="13" rx="2" /><path d="M2 8h15M6.5 2v4M12.5 2v4" /></svg>)
     case 'employees':
       return (<svg {...c}><circle cx="9.5" cy="6.5" r="3.5" /><path d="M3 17c0-3.5 3-5.5 6.5-5.5S16 13.5 16 17" /></svg>)
+    case 'expenses':
+      return (<svg {...c}><path d="M3 5h13a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H3z" /><path d="M3 9h14" /><circle cx="13.5" cy="12.5" r="1.5" /></svg>)
     case 'settings':
       return (<svg {...c}><circle cx="9.5" cy="9.5" r="3" /><path d="M9.5 1.5v3M9.5 14.5v3M1.5 9.5h3M14.5 9.5h3" /></svg>)
     default:
@@ -67,6 +71,7 @@ const NAV = [
   { key: 'payslip', label: 'Payslips' },
   { key: 'leave', label: 'Leave' },
   { key: 'employees', label: 'Employees' },
+  { key: 'expenses', label: 'Expenses' },
 ]
 
 export default function AdminShell() {
@@ -100,12 +105,13 @@ export default function AdminShell() {
       case 'payslip': return <Payslip />
       case 'leave': return <Leave />
       case 'employees': return <Employees />
+      case 'expenses': return <Expenses />
       case 'settings': return <Settings />
       default: return <Dashboard />
     }
   }
 
-  const ORANGE = '#f25c1f'
+  const ORANGE = '#2563eb'
   const MUTED = '#55554f'
 
   const SidebarItem = ({ item }) => {
@@ -115,7 +121,7 @@ export default function AdminShell() {
       <button
         onClick={() => navigate(item.key)}
         className="w-full border-none text-left flex items-center gap-[11px] px-3 py-[11px] rounded-[11px] text-sm font-semibold mb-[3px]"
-        style={{ background: active ? '#fff3ec' : 'transparent', color }}
+        style={{ background: active ? '#eff4ff' : 'transparent', color }}
       >
         <NavIcon name={item.key} color={color} />
         {item.label}
@@ -128,7 +134,7 @@ export default function AdminShell() {
       <div className="flex items-center gap-[10px] px-2 pb-6">
         <BrandLogo
           imgClass="h-10 w-auto object-contain shrink-0"
-          fallback={<div className="w-9 h-9 rounded-[11px] bg-orange flex items-center justify-center text-white text-lg font-extrabold shrink-0">J</div>}
+          fallback={<div className="w-9 h-9 rounded-[11px] bg-brand flex items-center justify-center text-white text-lg font-extrabold shrink-0">J</div>}
         />
         <div className="leading-tight min-w-0">
           <div className="text-[14px] font-extrabold leading-tight">Jaway Construction Services Inc.</div>

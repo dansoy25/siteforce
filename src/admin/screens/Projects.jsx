@@ -53,7 +53,7 @@ export default function Projects() {
           >
             <div className="flex justify-between items-center mb-[14px]">
               <div className="w-[42px] h-[42px] rounded-xl flex items-center justify-center text-xl"
-                   style={{ background: (p.accent || '#f25c1f') + '22', color: p.accent }}>
+                   style={{ background: (p.accent || '#2563eb') + '22', color: p.accent }}>
                 {p.icon}
               </div>
               <Pill kind={STATUS_KIND[p.status]}>{STATUS_LABEL[p.status]}</Pill>
@@ -61,7 +61,7 @@ export default function Projects() {
             <div className="text-base font-bold">{p.name}</div>
             <div className="text-[13px] text-muted mb-[14px]">{p.location}</div>
             <div className="h-[7px] bg-line rounded-full overflow-hidden mb-2">
-              <div className="h-full rounded-full" style={{ width: `${p.progress}%`, background: p.status === 'on_hold' ? '#e0982e' : '#f25c1f' }} />
+              <div className="h-full rounded-full" style={{ width: `${p.progress}%`, background: p.status === 'on_hold' ? '#e0982e' : '#2563eb' }} />
             </div>
             <div className="flex justify-between text-xs text-muted">
               <span>{p.progress}% complete</span>

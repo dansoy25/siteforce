@@ -6,7 +6,7 @@ import { Card, Avatar } from '../ui'
 import { peso, longDate } from '../../lib/format'
 
 function Step({ n, label, state }) {
-  const bg = state === 'done' ? '#1f9d6b' : state === 'active' ? '#f25c1f' : '#eaeae7'
+  const bg = state === 'done' ? '#1f9d6b' : state === 'active' ? '#2563eb' : '#eaeae7'
   const fg = state === 'todo' ? '#74746f' : '#fff'
   return (
     <div className="flex items-center gap-[10px] shrink-0">
@@ -113,7 +113,7 @@ export default function Payroll() {
             value={from}
             onChange={(e) => setFrom(e.target.value)}
             disabled={locked}
-            className="border-[1.5px] border-stroke rounded-[10px] px-3 py-[8px] text-sm tnum outline-none focus:border-orange disabled:bg-line"
+            className="border-[1.5px] border-stroke rounded-[10px] px-3 py-[8px] text-sm tnum outline-none focus:border-brand disabled:bg-line"
           />
         </div>
         <div>
@@ -123,7 +123,7 @@ export default function Payroll() {
             value={to}
             onChange={(e) => setTo(e.target.value)}
             disabled={locked}
-            className="border-[1.5px] border-stroke rounded-[10px] px-3 py-[8px] text-sm tnum outline-none focus:border-orange disabled:bg-line"
+            className="border-[1.5px] border-stroke rounded-[10px] px-3 py-[8px] text-sm tnum outline-none focus:border-brand disabled:bg-line"
           />
         </div>
         {!locked && (
@@ -146,7 +146,7 @@ export default function Payroll() {
       </div>
 
       {/* Selected period banner (also visible when printing) */}
-      <div className="mb-4 px-4 py-3 rounded-[14px] bg-orange-tint text-[#842b12] text-sm font-semibold flex items-center gap-2">
+      <div className="mb-4 px-4 py-3 rounded-[14px] bg-brand-tint text-[#842b12] text-sm font-semibold flex items-center gap-2">
         <span>📅</span>
         Pay period: <span className="tnum">{from && to ? `${longDate(from)} – ${longDate(to)}` : 'Pick a date range'}</span>
       </div>
@@ -156,7 +156,7 @@ export default function Payroll() {
         <Step n={1} label="Pay period" state="done" />
         {line('#1f9d6b')}
         <Step n={2} label="Auto-compute" state="done" />
-        {line(step >= 4 ? '#1f9d6b' : '#f25c1f')}
+        {line(step >= 4 ? '#1f9d6b' : '#2563eb')}
         <Step n={3} label="Review" state={step >= 4 ? 'done' : 'active'} />
         {line('#eaeae7')}
         <Step n={4} label="Lock" state={locked ? 'done' : 'todo'} />
@@ -202,12 +202,12 @@ export default function Payroll() {
             <div className="flex items-center gap-[10px] bg-green-tint text-[#15784f] rounded-xl px-[18px] py-3 text-sm font-semibold">
               🔒 Run locked — {data.count} payslips ready to generate
             </div>
-            <button onClick={() => navigate('payslip')} className="border-none bg-orange text-white text-sm font-semibold px-5 py-3 rounded-xl">
+            <button onClick={() => navigate('payslip')} className="border-none bg-brand text-white text-sm font-semibold px-5 py-3 rounded-xl">
               Generate payslips →
             </button>
           </>
         ) : (
-          <button onClick={lock} disabled={busy} className="border-none bg-orange text-white text-sm font-semibold px-[22px] py-3 rounded-xl shadow-[0_6px_16px_rgba(242,92,31,0.28)] disabled:opacity-60">
+          <button onClick={lock} disabled={busy} className="border-none bg-brand text-white text-sm font-semibold px-[22px] py-3 rounded-xl shadow-[0_6px_16px_rgba(37,99,235,0.28)] disabled:opacity-60">
             {busy ? 'Locking…' : 'Approve & lock run'}
           </button>
         )}

@@ -1,4 +1,4 @@
-const ORANGE = '#f25c1f'
+const ORANGE = '#2563eb'
 const MUTED = '#9b9b96'
 
 function Icon({ name, color }) {

@@ -52,7 +52,7 @@ export function AddEmployeeModal({ profile, sites, onClose, onDone, flash }) {
   if (result) {
     return (
       <Modal title="Employee created" subtitle="Share these credentials securely — the PIN is shown only once." onClose={onClose}
-        footer={<button onClick={onClose} className="w-full bg-orange text-white text-sm font-semibold py-[11px] rounded-xl border-none">Done</button>}>
+        footer={<button onClick={onClose} className="w-full bg-brand text-white text-sm font-semibold py-[11px] rounded-xl border-none">Done</button>}>
         <div className="bg-green-tint rounded-xl p-4 text-center mb-3">
           <div className="text-sm text-[#15784f] font-semibold mb-1">{f.full_name} can now sign in</div>
           <div className="text-xs text-muted">{result.email} · {result.employee_code}</div>
@@ -70,7 +70,7 @@ export function AddEmployeeModal({ profile, sites, onClose, onDone, flash }) {
       footer={
         <div className="flex gap-2">
           <button onClick={onClose} className="flex-1 border border-stroke bg-white text-ink-soft text-sm font-semibold py-[11px] rounded-xl">Cancel</button>
-          <button onClick={submit} disabled={busy} className="flex-1 border-none bg-orange text-white text-sm font-semibold py-[11px] rounded-xl disabled:opacity-60">{busy ? 'Creating…' : 'Create employee'}</button>
+          <button onClick={submit} disabled={busy} className="flex-1 border-none bg-brand text-white text-sm font-semibold py-[11px] rounded-xl disabled:opacity-60">{busy ? 'Creating…' : 'Create employee'}</button>
         </div>
       }>
       <div className="flex items-center gap-3 mb-3">
@@ -78,7 +78,7 @@ export function AddEmployeeModal({ profile, sites, onClose, onDone, flash }) {
           <Avatar name={f.full_name || '?'} src={photoPreview} size={56} />
         </button>
         <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={pickPhoto} />
-        <button type="button" onClick={() => fileRef.current?.click()} className="text-[13px] text-orange font-semibold border-none bg-transparent">
+        <button type="button" onClick={() => fileRef.current?.click()} className="text-[13px] text-brand font-semibold border-none bg-transparent">
           {photo ? 'Change photo' : 'Add photo (optional)'}
         </button>
       </div>
@@ -99,7 +99,7 @@ export function AddEmployeeModal({ profile, sites, onClose, onDone, flash }) {
       </div>
       <Field label="Schedule"><input className={inputCls} value={f.schedule} onChange={set('schedule')} /></Field>
       <label className="flex items-center gap-2 text-sm mt-1">
-        <input type="checkbox" checked={f.is_admin} onChange={set('is_admin')} className="accent-orange w-4 h-4" />
+        <input type="checkbox" checked={f.is_admin} onChange={set('is_admin')} className="accent-brand w-4 h-4" />
         Grant admin (web console) access
       </label>
       {err && <div className="text-[13px] text-red mt-3">{err}</div>}
@@ -132,7 +132,7 @@ export function AddProjectModal({ profile, sites, onClose, onDone, flash }) {
       footer={
         <div className="flex gap-2">
           <button onClick={onClose} className="flex-1 border border-stroke bg-white text-ink-soft text-sm font-semibold py-[11px] rounded-xl">Cancel</button>
-          <button onClick={submit} disabled={busy} className="flex-1 border-none bg-orange text-white text-sm font-semibold py-[11px] rounded-xl disabled:opacity-60">{busy ? 'Adding…' : 'Add project'}</button>
+          <button onClick={submit} disabled={busy} className="flex-1 border-none bg-brand text-white text-sm font-semibold py-[11px] rounded-xl disabled:opacity-60">{busy ? 'Adding…' : 'Add project'}</button>
         </div>
       }>
       <Field label="Project name"><input className={inputCls} value={f.name} onChange={set('name')} placeholder="San Antonio Drainage Ph.2" /></Field>
@@ -187,7 +187,7 @@ export function AddInventoryModal({ profile, onClose, onDone, flash }) {
       footer={
         <div className="flex gap-2">
           <button onClick={onClose} className="flex-1 border border-stroke bg-white text-ink-soft text-sm font-semibold py-[11px] rounded-xl">Cancel</button>
-          <button onClick={submit} disabled={busy} className="flex-1 border-none bg-orange text-white text-sm font-semibold py-[11px] rounded-xl disabled:opacity-60">{busy ? 'Adding…' : 'Add item'}</button>
+          <button onClick={submit} disabled={busy} className="flex-1 border-none bg-brand text-white text-sm font-semibold py-[11px] rounded-xl disabled:opacity-60">{busy ? 'Adding…' : 'Add item'}</button>
         </div>
       }>
       <div className="grid grid-cols-[1fr_auto] gap-3">

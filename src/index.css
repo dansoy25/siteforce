@@ -23,6 +23,25 @@
   --color-amber-tint: #fcf1df;
   --color-red: #e04444;
   --color-red-tint: #fce9e9;
+
+  /* Primary brand color (post-redesign). Currently blue; replaces orange for
+     actions, primary buttons, links, active states, and accent highlights.
+     The orange tokens above are kept for the company logo placeholder and
+     a few highlights. */
+  --color-brand: #2563eb;
+  --color-brand-dark: #1d4ed8;
+  --color-brand-tint: #eff4ff;
+  --color-brand-soft: #dbe7ff;
+
+  /* Pastel stat-card palette used by the new dashboard */
+  --color-stat-green: #dcf2e6;
+  --color-stat-green-dark: #166534;
+  --color-stat-amber: #fde8c1;
+  --color-stat-amber-dark: #92400e;
+  --color-stat-pink: #fbd5db;
+  --color-stat-pink-dark: #9f1239;
+  --color-stat-lavender: #dde2fb;
+  --color-stat-lavender-dark: #312e81;
 }
 
 * {
@@ -128,8 +147,12 @@ body {
   .print\:flex { display: flex !important; }
   .print\:grid { display: grid !important; }
   /* strip card shadows and colors so PDFs print cleanly on B/W printers */
-  #payroll-printable, #payslip-printable {
+  #payroll-printable, #payslip-printable, #qr-poster-printable {
     color: #000 !important;
+  }
+  #qr-poster-printable {
+    box-shadow: none !important;
+    page-break-inside: avoid;
   }
   #payroll-printable .bg-ink,
   #payslip-printable .bg-ink {
@@ -138,7 +161,9 @@ body {
     border: 1px solid #e5e7eb !important;
   }
   #payroll-printable .text-\[\#ff9963\],
-  #payslip-printable .text-\[\#ff9963\] {
+  #payslip-printable .text-\[\#ff9963\],
+  #payroll-printable .text-\[\#22c55e\],
+  #payslip-printable .text-\[\#22c55e\] {
     color: #000 !important;
   }
   #payslip-printable .text-white\/60,

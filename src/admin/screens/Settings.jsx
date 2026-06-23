@@ -4,6 +4,7 @@ import { fetchSites, updateSiteRadius, fetchOrgSettings, fetchRoles, fetchOrgani
 import { Card } from '../ui'
 import { peso } from '../../lib/format'
 import { AddEmployeeModal, AddProjectModal, AddInventoryModal } from '../AddRecordModals'
+import SiteQRPoster from '../SiteQRPoster'
 
 export default function Settings() {
   const { flash, profile } = useAdmin()
@@ -74,20 +75,37 @@ export default function Settings() {
   )
 
   const Toggle = ({ on }) => (
-    <div className="w-[42px] h-6 rounded-full relative" style={{ background: on ? '#f25c1f' : '#dcdcd8' }}>
+    <div className="w-[42px] h-6 rounded-full relative" style={{ background: on ? '#2563eb' : '#dcdcd8' }}>
       <div className="absolute top-[3px] w-[18px] h-[18px] rounded-full bg-white" style={{ right: on ? '3px' : '21px' }} />
     </div>
   )
 
   return (
     <div className="animate-fadeIn">
-      <div className="inline-flex bg-[#f4f4f2] rounded-[10px] p-[3px] gap-[3px] mb-4 flex-wrap">
+      <div className="inline-flex bg-[#f4f4f2] rounded-[10px] p-[3px] gap-[3px] mb-4 flex-wrap print:hidden">
         <Tab id="manage" label="Manage" />
         <Tab id="company" label="Company" />
         <Tab id="geofence" label="Geofence" />
+        <Tab id="qr" label="Gate QR" />
         <Tab id="pay" label="Pay rules" />
         <Tab id="roles" label="Roles" />
       </div>
+
+      {tab === 'qr' && (
+        <div>
+          <div className="flex items-center gap-3 mb-4 print:hidden">
+            <label className="text-[13px] font-semibold text-ink-soft">Site</label>
+            <select
+              value={siteId}
+              onChange={(e) => onPickSite(e.target.value)}
+              className="border-[1.5px] border-stroke rounded-[10px] px-3 py-2 text-sm outline-none focus:border-brand"
+            >
+              {sites.map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}
+            </select>
+          </div>
+          {site && <SiteQRPoster site={site} />}
+        </div>
+      )}
 
       {tab === 'manage' && (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-[14px] max-w-[760px]">
@@ -111,12 +129,12 @@ export default function Settings() {
               value={code}
               onChange={(e) => setCode(e.target.value.toUpperCase())}
               spellCheck={false}
-              className="flex-1 border-[1.5px] border-stroke rounded-[12px] px-3 py-[10px] text-sm font-semibold tnum uppercase outline-none focus:border-orange"
+              className="flex-1 border-[1.5px] border-stroke rounded-[12px] px-3 py-[10px] text-sm font-semibold tnum uppercase outline-none focus:border-brand"
             />
             <button
               onClick={saveCode}
               disabled={codeBusy || !code.trim() || code.trim() === org?.code}
-              className="border-none bg-orange text-white text-sm font-semibold px-4 py-[10px] rounded-[12px] disabled:opacity-50"
+              className="border-none bg-brand text-white text-sm font-semibold px-4 py-[10px] rounded-[12px] disabled:opacity-50"
             >
               {codeBusy ? 'Saving…' : 'Save'}
             </button>
@@ -134,7 +152,7 @@ export default function Settings() {
           <div className="px-5 py-4 border-b border-line flex flex-wrap items-center gap-3 justify-between">
             <span className="text-[15px] font-bold">Geofence zone editor</span>
             <select value={siteId} onChange={(e) => onPickSite(e.target.value)}
-                    className="border-[1.5px] border-stroke rounded-[10px] px-3 py-2 text-sm outline-none focus:border-orange">
+                    className="border-[1.5px] border-stroke rounded-[10px] px-3 py-2 text-sm outline-none focus:border-brand">
               {sites.map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}
             </select>
           </div>
@@ -144,17 +162,17 @@ export default function Settings() {
                  backgroundSize: '38px 38px',
                }}>
             <div className="absolute top-1/2 left-1/2 rounded-full -translate-x-1/2 -translate-y-1/2"
-                 style={{ width: radius * 1.8, height: radius * 1.8, maxWidth: 360, maxHeight: 360, background: 'rgba(242,92,31,.12)', border: '2px solid #f25c1f' }} />
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-orange border-[3px] border-white" />
+                 style={{ width: radius * 1.8, height: radius * 1.8, maxWidth: 360, maxHeight: 360, background: 'rgba(37,99,235,.12)', border: '2px solid #f25c1f' }} />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-brand border-[3px] border-white" />
             <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-ink text-white text-[11px] font-semibold px-[9px] py-[5px] rounded-lg tnum">
               radius {radius} m
             </div>
           </div>
           <div className="px-5 py-4 border-t border-line flex flex-wrap items-center gap-4">
             <span className="text-[13px] text-ink-soft">Radius</span>
-            <input type="range" min="40" max="300" step="10" value={radius} onChange={(e) => setRadius(Number(e.target.value))} className="flex-1 min-w-[160px] accent-orange" />
+            <input type="range" min="40" max="300" step="10" value={radius} onChange={(e) => setRadius(Number(e.target.value))} className="flex-1 min-w-[160px] accent-brand" />
             <span className="tnum text-sm font-semibold w-[60px]">{radius} m</span>
-            <button onClick={saveRadius} disabled={busy} className="border-none bg-orange text-white text-sm font-semibold px-4 py-2 rounded-[10px] disabled:opacity-60">
+            <button onClick={saveRadius} disabled={busy} className="border-none bg-brand text-white text-sm font-semibold px-4 py-2 rounded-[10px] disabled:opacity-60">
               {busy ? 'Saving…' : 'Save'}
             </button>
           </div>
@@ -215,10 +233,10 @@ function ManageCard({ icon, title, desc, onClick }) {
       onClick={onClick}
       className="text-left bg-white rounded-[18px] p-[18px] shadow-[0_1px_3px_rgba(10,10,9,0.08)] hover:shadow-md transition border-none"
     >
-      <div className="w-[42px] h-[42px] rounded-xl bg-orange-tint text-orange flex items-center justify-center text-xl mb-3">{icon}</div>
+      <div className="w-[42px] h-[42px] rounded-xl bg-brand-tint text-brand flex items-center justify-center text-xl mb-3">{icon}</div>
       <div className="text-[15px] font-bold mb-1">{title}</div>
       <div className="text-[13px] text-muted leading-snug">{desc}</div>
-      <div className="text-[13px] text-orange font-semibold mt-3">+ Open</div>
+      <div className="text-[13px] text-brand font-semibold mt-3">+ Open</div>
     </button>
   )
 }

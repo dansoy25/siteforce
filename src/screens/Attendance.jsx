@@ -20,7 +20,7 @@ function MiniMap() {
         backgroundSize: '11px 11px',
       }}
     >
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-orange border-2 border-white" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-brand border-2 border-white" />
     </div>
   )
 }

@@ -37,7 +37,7 @@ export default function Payslip() {
         <button onClick={() => window.print()} className="border-[1.5px] border-stroke bg-white text-ink-soft text-sm font-semibold px-4 py-2.5 rounded-xl inline-flex items-center gap-2">
           🖨 Print
         </button>
-        <button onClick={() => window.print()} className="border-none bg-orange text-white text-sm font-semibold px-4 py-2.5 rounded-xl">
+        <button onClick={() => window.print()} className="border-none bg-brand text-white text-sm font-semibold px-4 py-2.5 rounded-xl">
           Download PDF
         </button>
       </div>
@@ -53,7 +53,7 @@ export default function Payslip() {
               </div>
             </div>
             <div className="text-right">
-              <div className="text-[13px] font-bold tracking-wide uppercase text-orange">Payslip</div>
+              <div className="text-[13px] font-bold tracking-wide uppercase text-brand">Payslip</div>
               <div className="text-xs text-muted tnum">{shortDate(slip.period_start)} – {shortDate(slip.period_end)}, {year}</div>
             </div>
           </div>

@@ -97,7 +97,7 @@ export default function Leave() {
           <select
             value={typeId}
             onChange={(e) => setTypeId(e.target.value)}
-            className="w-full border-[1.5px] border-stroke rounded-xl px-[14px] py-[11px] text-sm mb-3 bg-white outline-none focus:border-orange appearance-none"
+            className="w-full border-[1.5px] border-stroke rounded-xl px-[14px] py-[11px] text-sm mb-3 bg-white outline-none focus:border-brand appearance-none"
           >
             {types.map((t) => (
               <option key={t.id} value={t.id}>
@@ -113,7 +113,7 @@ export default function Leave() {
                 type="date"
                 value={from}
                 onChange={(e) => setFrom(e.target.value)}
-                className="w-full border-[1.5px] border-stroke rounded-xl px-3 py-[11px] text-sm tnum outline-none focus:border-orange"
+                className="w-full border-[1.5px] border-stroke rounded-xl px-3 py-[11px] text-sm tnum outline-none focus:border-brand"
               />
             </div>
             <div className="flex-1">
@@ -122,7 +122,7 @@ export default function Leave() {
                 type="date"
                 value={to}
                 onChange={(e) => setTo(e.target.value)}
-                className="w-full border-[1.5px] border-stroke rounded-xl px-3 py-[11px] text-sm tnum outline-none focus:border-orange"
+                className="w-full border-[1.5px] border-stroke rounded-xl px-3 py-[11px] text-sm tnum outline-none focus:border-brand"
               />
             </div>
           </div>
@@ -132,13 +132,13 @@ export default function Leave() {
             value={reason}
             onChange={(e) => setReason(e.target.value)}
             rows={2}
-            className="w-full border-[1.5px] border-stroke rounded-xl px-[14px] py-[11px] text-sm mb-[14px] outline-none focus:border-orange resize-none"
+            className="w-full border-[1.5px] border-stroke rounded-xl px-[14px] py-[11px] text-sm mb-[14px] outline-none focus:border-brand resize-none"
           />
 
           <button
             onClick={onSubmit}
             disabled={busy}
-            className="w-full border-none bg-orange text-white text-[15px] font-semibold py-[14px] rounded-[13px] shadow-[0_6px_16px_rgba(242,92,31,0.28)] disabled:opacity-60"
+            className="w-full border-none bg-brand text-white text-[15px] font-semibold py-[14px] rounded-[13px] shadow-[0_6px_16px_rgba(37,99,235,0.28)] disabled:opacity-60"
           >
             {busy ? 'Submitting…' : 'Submit request'}
           </button>

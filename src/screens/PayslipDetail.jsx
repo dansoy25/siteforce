@@ -96,7 +96,7 @@ export default function PayslipDetail() {
           </button>
           <button
             onClick={() => flash('Payslip PDF downloaded')}
-            className="flex-1 border-none bg-orange text-white text-[15px] font-semibold py-[13px] rounded-[13px]"
+            className="flex-1 border-none bg-brand text-white text-[15px] font-semibold py-[13px] rounded-[13px]"
           >
             Download PDF
           </button>

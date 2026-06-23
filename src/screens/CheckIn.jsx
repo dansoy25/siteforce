@@ -39,7 +39,7 @@ export default function CheckIn() {
               <div
                 key={n}
                 className="flex-1 h-[5px] rounded-full"
-                style={{ background: step >= n ? '#f25c1f' : 'rgba(255,255,255,.22)' }}
+                style={{ background: step >= n ? '#2563eb' : 'rgba(255,255,255,.22)' }}
               />
             ))}
           </div>
@@ -179,10 +179,10 @@ function StepQR({ profile, onResolved, onError, error }) {
           className="absolute inset-0 w-full h-full object-cover"
         />
         {/* corner brackets */}
-        <div className="absolute top-0 left-0 w-[38px] h-[38px] border-t-4 border-l-4 border-orange rounded-tl-[10px]" style={{ animation: 'cornerPulse 1.6s infinite' }} />
-        <div className="absolute top-0 right-0 w-[38px] h-[38px] border-t-4 border-r-4 border-orange rounded-tr-[10px]" style={{ animation: 'cornerPulse 1.6s infinite' }} />
-        <div className="absolute bottom-0 left-0 w-[38px] h-[38px] border-b-4 border-l-4 border-orange rounded-bl-[10px]" style={{ animation: 'cornerPulse 1.6s infinite' }} />
-        <div className="absolute bottom-0 right-0 w-[38px] h-[38px] border-b-4 border-r-4 border-orange rounded-br-[10px]" style={{ animation: 'cornerPulse 1.6s infinite' }} />
+        <div className="absolute top-0 left-0 w-[38px] h-[38px] border-t-4 border-l-4 border-brand rounded-tl-[10px]" style={{ animation: 'cornerPulse 1.6s infinite' }} />
+        <div className="absolute top-0 right-0 w-[38px] h-[38px] border-t-4 border-r-4 border-brand rounded-tr-[10px]" style={{ animation: 'cornerPulse 1.6s infinite' }} />
+        <div className="absolute bottom-0 left-0 w-[38px] h-[38px] border-b-4 border-l-4 border-brand rounded-bl-[10px]" style={{ animation: 'cornerPulse 1.6s infinite' }} />
+        <div className="absolute bottom-0 right-0 w-[38px] h-[38px] border-b-4 border-r-4 border-brand rounded-br-[10px]" style={{ animation: 'cornerPulse 1.6s infinite' }} />
         <div className="absolute left-[6%] right-[6%] h-[3px] bg-[#fa763a] rounded-full" style={{ boxShadow: '0 0 14px 3px rgba(250,118,58,.8)', animation: 'qrScan 2.4s ease-in-out infinite' }} />
       </div>
       <div className="text-white text-base font-semibold mt-8">Point at the site QR code</div>
@@ -192,7 +192,7 @@ function StepQR({ profile, onResolved, onError, error }) {
       {error && <div className="text-[#ff9d77] text-[13px] mt-3 text-center max-w-[240px]">{error}</div>}
       <button
         onClick={() => resolve(profile.site?.qr_payload || 'SITE-SAN-ANTONIO-B')}
-        className="mt-[26px] border-none bg-orange text-white text-[15px] font-semibold px-[30px] py-[14px] rounded-[14px]"
+        className="mt-[26px] border-none bg-brand text-white text-[15px] font-semibold px-[30px] py-[14px] rounded-[14px]"
       >
         Simulate scan
       </button>
@@ -250,12 +250,12 @@ function StepGPS({ site, coords, setCoords, onNext }) {
         >
           <div className="absolute top-[18%] -left-[5%] w-[60%] h-[14px] bg-[#c2c2bd] rotate-[18deg]" />
           <div className="absolute bottom-[24%] -right-[8%] w-[70%] h-[14px] bg-[#c2c2bd] -rotate-[12deg]" />
-          <div className="absolute top-1/2 left-1/2 w-[190px] h-[190px] rounded-full bg-orange/10 border-2 border-orange -translate-x-1/2 -translate-y-1/2" />
+          <div className="absolute top-1/2 left-1/2 w-[190px] h-[190px] rounded-full bg-brand/10 border-2 border-brand -translate-x-1/2 -translate-y-1/2" />
           <div
-            className="absolute top-1/2 left-1/2 w-[190px] h-[190px] rounded-full border-2 border-orange -translate-x-1/2 -translate-y-1/2"
+            className="absolute top-1/2 left-1/2 w-[190px] h-[190px] rounded-full border-2 border-brand -translate-x-1/2 -translate-y-1/2"
             style={{ animation: 'pulseRing 2s ease-out infinite' }}
           />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[18px] h-[18px] rounded-full bg-orange border-[3px] border-white shadow-[0_2px_6px_rgba(0,0,0,.3)]" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[18px] h-[18px] rounded-full bg-brand border-[3px] border-white shadow-[0_2px_6px_rgba(0,0,0,.3)]" />
         </div>
         <div className="bg-white px-4 py-[14px] flex items-center gap-3">
           <div
@@ -283,7 +283,7 @@ function StepGPS({ site, coords, setCoords, onNext }) {
             )}
           </div>
           {status === 'denied' && (
-            <button onClick={locate} className="text-xs font-semibold text-orange border-none bg-transparent">
+            <button onClick={locate} className="text-xs font-semibold text-brand border-none bg-transparent">
               Retry
             </button>
           )}
@@ -293,7 +293,7 @@ function StepGPS({ site, coords, setCoords, onNext }) {
       <button
         onClick={onNext}
         disabled={!canContinue}
-        className="w-full border-none bg-orange text-white text-base font-semibold py-4 rounded-[14px] my-4 shadow-[0_6px_16px_rgba(242,92,31,0.28)] disabled:opacity-50"
+        className="w-full border-none bg-brand text-white text-base font-semibold py-4 rounded-[14px] my-4 shadow-[0_6px_16px_rgba(37,99,235,0.28)] disabled:opacity-50"
       >
         {status === 'locating'
           ? 'Locating…'
@@ -381,7 +381,7 @@ function StepFace({ onNext }) {
       </div>
       <button
         onClick={onNext}
-        className="mt-[26px] border-none bg-orange text-white text-[15px] font-semibold px-[30px] py-[14px] rounded-[14px]"
+        className="mt-[26px] border-none bg-brand text-white text-[15px] font-semibold px-[30px] py-[14px] rounded-[14px]"
       >
         {ready ? 'Capture & verify' : 'Simulate blink'}
       </button>

@@ -233,7 +233,7 @@ export async function createProject(orgId, p) {
       location: p.location || null,
       site_id: p.site_id || null,
       icon: p.icon || '🏗',
-      accent: p.accent || '#F25C1F',
+      accent: p.accent || '#2563EB',
       status: p.status || 'active',
       progress: Number(p.progress) || 0,
       worker_count: Number(p.worker_count) || 0,
@@ -282,6 +282,44 @@ export async function createEmployee(payload) {
   }
   if (data?.error) throw new Error(data.error)
   return data // { pin, employee_code, email }
+}
+
+// ---------- Expenses ----------
+export async function fetchExpenses({ projectId } = {}) {
+  let q = supabase
+    .from('expenses')
+    .select('*, project:projects(name, accent, icon)')
+    .order('spent_on', { ascending: false })
+    .limit(200)
+  if (projectId) q = q.eq('project_id', projectId)
+  const { data, error } = await q
+  if (error) throw error
+  return data
+}
+
+export async function createExpense(orgId, exp, createdBy) {
+  const { data, error } = await supabase
+    .from('expenses')
+    .insert({
+      org_id: orgId,
+      project_id: exp.project_id || null,
+      category: exp.category || 'other',
+      vendor: exp.vendor || null,
+      amount: Number(exp.amount) || 0,
+      spent_on: exp.spent_on,
+      description: exp.description || null,
+      receipt_url: exp.receipt_url || null,
+      created_by: createdBy,
+    })
+    .select('*')
+    .single()
+  if (error) throw error
+  return data
+}
+
+export async function deleteExpense(id) {
+  const { error } = await supabase.from('expenses').delete().eq('id', id)
+  if (error) throw error
 }
 
 // ---------- Roles / settings ----------

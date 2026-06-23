@@ -103,7 +103,7 @@ export default function Attendance() {
             }}
           >
             {sites.map((s, i) => {
-              const palette = ['#1f9d6b', '#f25c1f', '#e0982e']
+              const palette = ['#1f9d6b', '#2563eb', '#e0982e']
               const pos = [{ top: '30%', left: '24%' }, { top: '50%', left: '54%' }, { top: '18%', left: '64%' }][i % 3]
               const color = palette[i % 3]
               const count = rows.filter((r) => r.site?.name === s.name).length
@@ -117,7 +117,7 @@ export default function Attendance() {
           </div>
           <div className="px-[18px] py-[14px] flex flex-wrap gap-[18px]">
             {sites.map((s, i) => {
-              const palette = ['#1f9d6b', '#f25c1f', '#e0982e']
+              const palette = ['#1f9d6b', '#2563eb', '#e0982e']
               const count = rows.filter((r) => r.site?.name === s.name).length
               return (
                 <span key={s.id} className="inline-flex items-center gap-[6px] text-[13px] text-ink-soft">

@@ -36,7 +36,7 @@ export default function AdminLogin() {
           <div className="flex items-center gap-3">
             <BrandLogo
               imgClass="h-14 w-auto object-contain bg-white rounded-xl p-1.5"
-              fallback={<div className="w-[42px] h-[42px] rounded-[13px] bg-orange flex items-center justify-center text-[21px] font-extrabold">J</div>}
+              fallback={<div className="w-[42px] h-[42px] rounded-[13px] bg-brand flex items-center justify-center text-[21px] font-extrabold">J</div>}
             />
             <div className="leading-tight">
               <div className="text-xl font-extrabold">Jaway Construction Services Inc.</div>
@@ -69,7 +69,7 @@ export default function AdminLogin() {
           <div className="flex items-center gap-3 mb-8 lg:hidden">
             <BrandLogo
               imgClass="h-12 w-auto object-contain"
-              fallback={<div className="w-10 h-10 rounded-xl bg-orange flex items-center justify-center text-lg font-extrabold text-white">J</div>}
+              fallback={<div className="w-10 h-10 rounded-xl bg-brand flex items-center justify-center text-lg font-extrabold text-white">J</div>}
             />
             <div className="leading-tight">
               <div className="text-lg font-extrabold">Jaway Construction Services Inc.</div>
@@ -88,7 +88,7 @@ export default function AdminLogin() {
               autoCapitalize="characters"
               spellCheck={false}
               placeholder="e.g. SAN-ANT"
-              className="w-full border-[1.5px] border-stroke rounded-[14px] px-4 py-[14px] text-[15px] mb-[18px] outline-none focus:border-orange placeholder:text-faint uppercase"
+              className="w-full border-[1.5px] border-stroke rounded-[14px] px-4 py-[14px] text-[15px] mb-[18px] outline-none focus:border-brand placeholder:text-faint uppercase"
             />
             <label className="text-[13px] font-semibold text-ink-soft mb-1.5 block">Work email</label>
             <input
@@ -98,7 +98,7 @@ export default function AdminLogin() {
               autoCapitalize="none"
               spellCheck={false}
               placeholder="you@company.ph"
-              className="w-full border-[1.5px] border-stroke rounded-[14px] px-4 py-[14px] text-[15px] mb-[18px] outline-none focus:border-orange placeholder:text-faint"
+              className="w-full border-[1.5px] border-stroke rounded-[14px] px-4 py-[14px] text-[15px] mb-[18px] outline-none focus:border-brand placeholder:text-faint"
             />
             <label className="text-[13px] font-semibold text-ink-soft mb-1.5 block">Password</label>
             <input
@@ -106,7 +106,7 @@ export default function AdminLogin() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••••"
-              className="w-full border-[1.5px] border-stroke rounded-[14px] px-4 py-[14px] text-[15px] mb-2 outline-none focus:border-orange"
+              className="w-full border-[1.5px] border-stroke rounded-[14px] px-4 py-[14px] text-[15px] mb-2 outline-none focus:border-brand"
             />
             <div className="min-h-[20px] mb-3 text-[13px]" style={{ color: error ? '#e04444' : '#9b9b96' }}>
               {error || 'Use your administrator account.'}
@@ -114,13 +114,13 @@ export default function AdminLogin() {
             <button
               type="submit"
               disabled={busy}
-              className="w-full border-none bg-orange text-white text-base font-semibold py-[15px] rounded-[14px] shadow-[0_6px_16px_rgba(242,92,31,0.28)] disabled:opacity-60"
+              className="w-full border-none bg-brand text-white text-base font-semibold py-[15px] rounded-[14px] shadow-[0_6px_16px_rgba(37,99,235,0.28)] disabled:opacity-60"
             >
               {busy ? 'Signing in…' : 'Sign in'}
             </button>
           </form>
 
-          <a href={import.meta.env.BASE_URL} className="text-center text-[13px] text-muted mt-5 hover:text-orange">
+          <a href={import.meta.env.BASE_URL} className="text-center text-[13px] text-muted mt-5 hover:text-brand">
             ← Back to employee app
           </a>
         </div>

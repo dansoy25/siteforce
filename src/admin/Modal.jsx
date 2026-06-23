@@ -47,4 +47,4 @@ export function Field({ label, children }) {
 }
 
 export const inputCls =
-  'w-full border-[1.5px] border-stroke rounded-[12px] px-3 py-[10px] text-sm outline-none focus:border-orange placeholder:text-faint'
+  'w-full border-[1.5px] border-stroke rounded-[12px] px-3 py-[10px] text-sm outline-none focus:border-brand placeholder:text-faint'

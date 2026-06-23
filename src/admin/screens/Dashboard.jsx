@@ -4,15 +4,33 @@ import { fetchDashboard } from '../../lib/adminApi'
 import { Card, Avatar, Pill } from '../ui'
 import { peso, shortDate } from '../../lib/format'
 
-function Stat({ icon, bg, fg, value, label }) {
+// Pastel color-coded stat tile, per Figma. Uses a soft tinted background and
+// a small icon pill in the same hue.
+function Stat({ icon, tint, dot, value, label, badge }) {
   return (
-    <Card className="p-[18px]">
-      <div className="w-9 h-9 rounded-[10px] flex items-center justify-center mb-3" style={{ background: bg, color: fg }}>
-        {icon}
+    <div
+      className="rounded-[20px] p-[18px] shadow-[0_1px_3px_rgba(10,10,9,0.06)] relative overflow-hidden"
+      style={{ background: tint }}
+    >
+      <div className="flex items-center justify-between mb-3">
+        <div
+          className="w-9 h-9 rounded-[10px] flex items-center justify-center bg-white/70 text-sm"
+          style={{ color: dot }}
+        >
+          {icon}
+        </div>
+        {badge && (
+          <span
+            className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-white/70"
+            style={{ color: dot }}
+          >
+            {badge}
+          </span>
+        )}
       </div>
-      <div className="text-[28px] font-extrabold tnum">{value}</div>
-      <div className="text-[13px] text-muted">{label}</div>
-    </Card>
+      <div className="text-[30px] font-extrabold tnum leading-none mb-1" style={{ color: '#0f172a' }}>{value}</div>
+      <div className="text-[13px] font-semibold" style={{ color: dot }}>{label}</div>
+    </div>
   )
 }
 
@@ -40,16 +58,23 @@ export default function Dashboard() {
             {d.employeeCount} employees · {d.pendingCount} pending approvals
           </div>
         </div>
-        <button onClick={() => navigate('payroll')} className="border-none bg-orange text-white text-sm font-semibold px-[18px] py-[10px] rounded-xl">
+        <button onClick={() => navigate('payroll')} className="border-none bg-brand text-white text-sm font-semibold px-[18px] py-[10px] rounded-xl">
           Run payroll
         </button>
       </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-[14px] mb-4">
-        <Stat icon="✓" bg="#e7f6ef" fg="#1f9d6b" value={d.present} label="Present today" />
-        <Stat icon="◷" bg="#fcf1df" fg="#e0982e" value={d.late} label="Late arrivals" />
-        <Stat icon="○" bg="#fce9e9" fg="#e04444" value={d.absent} label="Absent" />
-        <Stat icon="⊙" bg="#e8eefe" fg="#3b6ff0" value={d.onLeave} label="On leave" />
+        <Stat
+          icon="✓"
+          tint="#dcf2e6"
+          dot="#166534"
+          value={d.present}
+          label="Present today"
+          badge={d.employeeCount > 0 ? `${Math.round((d.present / d.employeeCount) * 1000) / 10}%` : null}
+        />
+        <Stat icon="◷" tint="#fde8c1" dot="#92400e" value={d.late} label="Late arrivals" />
+        <Stat icon="○" tint="#fbd5db" dot="#9f1239" value={d.absent} label="Absent" />
+        <Stat icon="⊙" tint="#dde2fb" dot="#312e81" value={d.onLeave} label="On leave" />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-[1.6fr_1fr] gap-[14px] mb-[14px]">
@@ -59,7 +84,7 @@ export default function Dashboard() {
             {d.trend.map((t, i) => (
               <div key={t.date} className="flex-1 rounded-t-lg" style={{
                 height: `${Math.max(6, (t.count / maxTrend) * 100)}%`,
-                background: i === d.trend.length - 1 ? '#ffbe99' : '#f25c1f',
+                background: i === d.trend.length - 1 ? '#a5b4fc' : '#2563eb',
               }} title={`${t.count} on ${t.date}`} />
             ))}
           </div>
@@ -72,7 +97,7 @@ export default function Dashboard() {
           </div>
         </Card>
 
-        <div className="bg-ink rounded-[18px] p-5 text-white">
+        <div className="bg-ink rounded-[18px] p-5 text-white relative" style={{ boxShadow: '0 0 0 2px #22c55e' }}>
           <div className="text-xs tracking-wide uppercase text-white/60">Next payroll run</div>
           <div className="text-xl font-extrabold mt-1.5 mb-0.5">
             {d.run ? `${shortDate(d.run.period_start)} – ${shortDate(d.run.period_end)}, 2026` : '—'}
@@ -80,38 +105,61 @@ export default function Dashboard() {
           <div className="text-[13px] text-white/60">{d.run?.status === 'locked' ? 'Locked' : 'Draft — ready to run'}</div>
           <div className="h-px bg-white/10 my-4" />
           <div className="flex justify-between py-[5px] text-sm">
-            <span className="text-white/70">Est. net</span>
-            <span className="tnum font-extrabold text-[#ff9963]">{peso(d.run?.net || 0)}</span>
+            <span className="text-white/70">Est. gross</span>
+            <span className="tnum">{peso(d.run?.gross || 0)}</span>
           </div>
-          <button onClick={() => navigate('payroll')} className="w-full border-none bg-orange text-white text-sm font-semibold py-3 rounded-xl mt-3.5">
+          <div className="flex justify-between py-[5px] text-sm">
+            <span className="text-white/70">Est. deductions</span>
+            <span className="tnum">{peso(d.run?.deductions || 0)}</span>
+          </div>
+          <div className="flex justify-between py-[5px] text-sm font-semibold">
+            <span className="text-white">Est. net</span>
+            <span className="tnum text-[#22c55e]">{peso(d.run?.net || 0)}</span>
+          </div>
+          <button onClick={() => navigate('payroll')} className="w-full border-none bg-brand text-white text-sm font-semibold py-3 rounded-xl mt-3.5">
             Start run
           </button>
         </div>
       </div>
 
-      <Card className="p-[18px]">
-        <div className="flex justify-between items-center mb-3">
-          <div className="text-[15px] font-bold">Pending leave approvals</div>
-          <button onClick={() => navigate('leave')} className="border-none bg-transparent text-orange text-[13px] font-semibold">
-            View all →
-          </button>
-        </div>
-        {d.pending.length === 0 && <div className="text-sm text-muted py-4">No pending requests 🎉</div>}
-        {d.pending.map((l, i) => (
-          <div key={l.id} className={'flex items-center gap-3 py-[9px] ' + (i < d.pending.length - 1 ? 'border-b border-line' : '')}>
-            <Avatar name={l.profile?.full_name} src={l.profile?.avatar_url} size={32} />
-            <div className="flex-1 min-w-0">
-              <div className="text-[13px] font-semibold truncate">{l.profile?.full_name} · {l.leave_type?.name?.replace(' leave', '')}</div>
-              <div className="text-xs text-faint tnum">
-                {shortDate(l.date_from)}{l.date_from !== l.date_to ? `–${shortDate(l.date_to).replace(/^\w+ /, '')}` : ''} · {Number(l.days)} day{Number(l.days) > 1 ? 's' : ''}
-              </div>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-[14px]">
+        <Card className="p-[18px]">
+          <div className="flex justify-between items-center mb-3">
+            <div className="flex items-center gap-2 text-[15px] font-bold">
+              Pending leave approvals
+              {d.pendingCount > 0 && (
+                <span className="bg-brand text-white text-[11px] font-bold w-5 h-5 rounded-full inline-flex items-center justify-center">
+                  {d.pendingCount}
+                </span>
+              )}
             </div>
-            <button onClick={() => navigate('leave')} className="border-none bg-[#f4f4f2] text-ink-soft text-xs font-semibold px-3 py-1.5 rounded-full">
-              Review
+            <button onClick={() => navigate('leave')} className="border-none bg-transparent text-brand text-[13px] font-semibold">
+              View all →
             </button>
           </div>
-        ))}
-      </Card>
+          {d.pending.length === 0 && <div className="text-sm text-muted py-4">No pending requests 🎉</div>}
+          {d.pending.map((l, i) => (
+            <div key={l.id} className={'flex items-center gap-3 py-[9px] ' + (i < d.pending.length - 1 ? 'border-b border-line' : '')}>
+              <Avatar name={l.profile?.full_name} src={l.profile?.avatar_url} size={32} />
+              <div className="flex-1 min-w-0">
+                <div className="text-[13px] font-semibold truncate">{l.profile?.full_name} · {l.leave_type?.name?.replace(' leave', '')}</div>
+                <div className="text-xs text-faint tnum">
+                  {shortDate(l.date_from)}{l.date_from !== l.date_to ? `–${shortDate(l.date_to).replace(/^\w+ /, '')}` : ''} · {Number(l.days)} day{Number(l.days) > 1 ? 's' : ''}
+                </div>
+              </div>
+              <button onClick={() => navigate('leave')} title="Approve" className="border-none w-8 h-8 rounded-lg bg-green-tint text-green text-base">✓</button>
+              <button onClick={() => navigate('leave')} title="Reject" className="border-none w-8 h-8 rounded-lg bg-red-tint text-red text-base">✕</button>
+            </div>
+          ))}
+        </Card>
+
+        <Card className="p-[18px]">
+          <div className="flex justify-between items-center mb-3">
+            <div className="text-[15px] font-bold">Recent activity</div>
+          </div>
+          <div className="text-sm text-muted">See the bell 🔔 in the top bar for the live activity feed.</div>
+        </Card>
+      </div>
     </div>
   )
 }
