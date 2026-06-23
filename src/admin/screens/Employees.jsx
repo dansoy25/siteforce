@@ -1,13 +1,18 @@
 import { useEffect, useRef, useState } from 'react'
-import { fetchEmployees } from '../../lib/adminApi'
+import { useAdmin } from '../AdminShell'
+import { fetchEmployees, fetchSites } from '../../lib/adminApi'
 import { uploadAvatar } from '../../lib/api'
 import { Card, Avatar, Pill } from '../ui'
-import { peso } from '../../lib/format'
+import { peso, shortDate } from '../../lib/format'
+import { AddEmployeeModal } from '../AddRecordModals'
 
 export default function Employees() {
+  const { flash, profile } = useAdmin()
   const [rows, setRows] = useState([])
+  const [sites, setSites] = useState([])
   const [selected, setSelected] = useState(null)
   const [uploading, setUploading] = useState(false)
+  const [showAdd, setShowAdd] = useState(false)
   const fileRef = useRef(null)
 
   const load = () =>
@@ -16,7 +21,7 @@ export default function Employees() {
       setSelected((cur) => list.find((x) => x.id === cur?.id) || list[0] || null)
     }).catch(() => setRows([]))
 
-  useEffect(() => { load() }, [])
+  useEffect(() => { load(); fetchSites().then(setSites).catch(() => {}) }, [])
 
   async function onPickPhoto(e) {
     const file = e.target.files?.[0]
@@ -35,7 +40,15 @@ export default function Employees() {
   }
 
   return (
-    <div className="animate-fadeIn grid grid-cols-1 lg:grid-cols-[1.5fr_1fr] gap-[18px]">
+    <div className="animate-fadeIn">
+      <div className="flex flex-wrap items-center gap-3 mb-4">
+        <div className="text-[15px] font-bold">{rows.length} total</div>
+        <div className="flex-1" />
+        <span className="hidden md:inline-flex items-center gap-2 border border-stroke rounded-xl px-[14px] py-2 text-[13px] text-faint w-[220px]">⌕ Search…</span>
+        <button onClick={() => setShowAdd(true)} className="border-none bg-brand text-white text-sm font-semibold px-4 py-2 rounded-xl">+ Add</button>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-[1.5fr_1fr] gap-[18px]">
       <Card className="overflow-hidden">
         <div className="hidden sm:grid grid-cols-[2fr_1.2fr_1fr_1fr] px-[22px] py-[13px] bg-[#fafaf9] text-[11px] font-semibold tracking-wide uppercase text-muted border-b border-[#eaeae7]">
           <div>Name</div><div>Role</div><div>Rate</div><div>Status</div>
@@ -80,13 +93,25 @@ export default function Employees() {
           <div className="bg-[#fafaf9] rounded-2xl p-4 mb-3.5">
             <Row label="Pay rate" value={Number(selected.daily_rate) > 0 ? `${peso(selected.daily_rate)} / day` : '—'} border />
             <Row label="Schedule" value={selected.schedule || '—'} border />
-            <Row label="Site" value={selected.site?.name || '—'} />
+            <Row label="Site" value={selected.site?.name || '—'} border />
+            <Row label="Joined" value={selected.created_at ? shortDate(selected.created_at.slice(0, 10)) + ', ' + new Date(selected.created_at).getFullYear() : '—'} />
           </div>
-          <div className="flex justify-between items-center bg-green-tint rounded-[14px] px-4 py-3">
+          <div className="flex justify-between items-center bg-green-tint rounded-[14px] px-4 py-3 mb-3.5">
             <span className="text-[13px] text-[#15784f] font-semibold">Biometric enrolled</span>
             <span className="text-xs font-bold text-green">{selected.face_enrolled ? '✓ Face + PIN' : 'Pending'}</span>
           </div>
+          <div className="text-[13px] font-semibold text-ink-soft mb-2">Documents</div>
+          <div className="flex flex-wrap gap-2">
+            {['📄 Contract', '🪪 SSS ID', '🏥 PhilHealth'].map((doc) => (
+              <span key={doc} className="border border-stroke bg-white rounded-[10px] px-3 py-2 text-[12px] text-ink-soft">{doc}</span>
+            ))}
+          </div>
         </Card>
+      )}
+      </div>
+
+      {showAdd && (
+        <AddEmployeeModal profile={profile} sites={sites} flash={flash} onClose={() => setShowAdd(false)} onDone={load} />
       )}
     </div>
   )

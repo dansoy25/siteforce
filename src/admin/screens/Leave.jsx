@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react'
 import { useAdmin } from '../AdminShell'
-import { fetchLeaveQueue, decideLeave } from '../../lib/adminApi'
+import { fetchLeaveQueue, decideLeave, fetchTeamBalances } from '../../lib/adminApi'
 import { logActivity } from '../../lib/api'
 import { Card, Avatar, Pill } from '../ui'
 import { shortDate } from '../../lib/format'
@@ -9,11 +9,16 @@ export default function Leave() {
   const { flash, profile } = useAdmin()
   const [rows, setRows] = useState([])
   const [busy, setBusy] = useState(null)
+  const [notes, setNotes] = useState({})
+  const [teamBalances, setTeamBalances] = useState([])
 
   const load = useCallback(() => {
     fetchLeaveQueue().then(setRows).catch(() => setRows([]))
   }, [])
-  useEffect(() => { load() }, [load])
+  useEffect(() => {
+    load()
+    fetchTeamBalances().then(setTeamBalances).catch(() => setTeamBalances([]))
+  }, [load])
 
   const pending = rows.filter((r) => r.status === 'pending')
 
@@ -21,7 +26,8 @@ export default function Leave() {
     setBusy(id)
     try {
       const req = rows.find((r) => r.id === id)
-      await decideLeave(id, decision, profile.full_name, decision === 'rejected' ? 'Reviewed by admin.' : null)
+      const note = notes[id] || (decision === 'rejected' ? 'Reviewed by admin.' : null)
+      await decideLeave(id, decision, profile.full_name, note)
       logActivity({
         orgId: profile.org_id,
         actorId: profile.id,
@@ -42,7 +48,12 @@ export default function Leave() {
     <div className="animate-fadeIn grid grid-cols-1 lg:grid-cols-[1.5fr_1fr] gap-[18px]">
       {/* queue */}
       <div className="flex flex-col gap-[14px]">
-        <div className="text-[15px] font-bold">Approval queue {pending.length > 0 && <span className="text-muted font-semibold">· {pending.length}</span>}</div>
+        <div className="flex items-center gap-2">
+          <span className="text-[15px] font-bold">Approval queue</span>
+          {pending.length > 0 && (
+            <span className="bg-brand text-white text-[11px] font-bold px-2.5 py-0.5 rounded-full">{pending.length} pending</span>
+          )}
+        </div>
 
         {pending.length === 0 && (
           <Card className="p-10 text-center">
@@ -69,15 +80,23 @@ export default function Leave() {
               <div><div className="text-[11px] text-faint">Days</div><div className="text-sm font-semibold tnum">{Number(r.days)}</div></div>
             </div>
             {r.reason && <div className="text-[13px] text-ink-soft mb-3.5">“{r.reason}”</div>}
-            <div className="flex gap-[10px] justify-end">
-              <button onClick={() => decide(r.id, 'rejected')} disabled={busy === r.id}
-                      className="border-[1.5px] border-[#fce9e9] bg-[#fce9e9] text-red text-[13px] font-semibold px-4 py-[9px] rounded-[11px] disabled:opacity-60">
-                Reject
-              </button>
-              <button onClick={() => decide(r.id, 'approved')} disabled={busy === r.id}
-                      className="border-none bg-green text-white text-[13px] font-semibold px-[18px] py-[9px] rounded-[11px] disabled:opacity-60">
-                Approve
-              </button>
+            <div className="flex flex-col sm:flex-row gap-[10px] items-stretch sm:items-center">
+              <input
+                value={notes[r.id] || ''}
+                onChange={(e) => setNotes((n) => ({ ...n, [r.id]: e.target.value }))}
+                placeholder="Add a note (optional)"
+                className="flex-1 border border-stroke rounded-[11px] px-3 py-[9px] text-[13px] outline-none focus:border-brand placeholder:text-faint"
+              />
+              <div className="flex gap-[10px] justify-end">
+                <button onClick={() => decide(r.id, 'rejected')} disabled={busy === r.id}
+                        className="border-[1.5px] border-[#fce9e9] bg-[#fce9e9] text-red text-[13px] font-semibold px-4 py-[9px] rounded-[11px] disabled:opacity-60">
+                  Reject
+                </button>
+                <button onClick={() => decide(r.id, 'approved')} disabled={busy === r.id}
+                        className="border-none bg-green text-white text-[13px] font-semibold px-[18px] py-[9px] rounded-[11px] disabled:opacity-60">
+                  Approve
+                </button>
+              </div>
             </div>
           </Card>
         ))}
@@ -100,7 +119,8 @@ export default function Leave() {
         )}
       </div>
 
-      {/* calendar */}
+      {/* right column: calendar + balances */}
+      <div className="flex flex-col gap-[14px]">
       <Card className="p-[18px] h-fit">
         <div className="text-[15px] font-bold mb-3.5">Team calendar · June</div>
         <div className="grid grid-cols-7 gap-[5px] text-[11px] text-faint text-center mb-1.5">
@@ -122,6 +142,18 @@ export default function Leave() {
           <span className="inline-flex items-center gap-[5px] text-[11px] text-muted"><span className="w-2 h-2 rounded-full bg-red" />Sick</span>
         </div>
       </Card>
+
+      <Card className="p-[18px] h-fit">
+        <div className="text-[15px] font-bold mb-3">Balances by team</div>
+        {teamBalances.length === 0 && <div className="text-sm text-muted">No data yet.</div>}
+        {teamBalances.map((t, i) => (
+          <div key={t.name} className={'flex justify-between items-center py-[10px] text-sm ' + (i < teamBalances.length - 1 ? 'border-b border-line' : '')}>
+            <span className="font-semibold">{t.name}</span>
+            <span className="text-muted tnum">Avg {t.avg} days</span>
+          </div>
+        ))}
+      </Card>
+      </div>
     </div>
   )
 }

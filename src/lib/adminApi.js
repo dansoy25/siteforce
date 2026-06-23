@@ -95,6 +95,24 @@ export async function fetchLeaveQueue() {
   return data
 }
 
+// Average remaining leave balance per site (for the "Balances by team" card).
+export async function fetchTeamBalances() {
+  const { data, error } = await supabase
+    .from('leave_balances')
+    .select('balance, profile:profiles(site:sites(name))')
+  if (error) throw error
+  const bySite = {}
+  ;(data || []).forEach((b) => {
+    const s = b.profile?.site?.name
+    if (!s) return
+    ;(bySite[s] = bySite[s] || []).push(Number(b.balance || 0))
+  })
+  return Object.entries(bySite).map(([name, arr]) => ({
+    name,
+    avg: Math.round((arr.reduce((a, c) => a + c, 0) / arr.length) * 10) / 10,
+  }))
+}
+
 export async function decideLeave(id, decision, reviewerName, note) {
   const { error } = await supabase
     .from('leave_requests')
