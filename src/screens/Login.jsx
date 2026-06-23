@@ -55,8 +55,11 @@ export default function Login() {
     setPin((p) => (p.length >= 6 ? p : p + k))
   }
 
+  // Multicolor PIN dots, matching the Figma mobile login.
+  const DOT_COLORS = ['#facc15', '#ec4899', '#ef4444', '#22c55e', '#3b82f6', '#a855f7']
+
   return (
-    <PhoneFrame bg="#fafaf9">
+    <PhoneFrame bg="linear-gradient(180deg, #fdf4e3 0%, #f3ecdb 26%, #6f93ec 72%, #1e44b0 100%)">
       <div className="flex-1 flex flex-col px-7 pt-9 pb-9 animate-fadeIn overflow-y-auto no-scrollbar">
         <div className="flex flex-col items-center mt-[14px] mb-[30px]">
           <BrandLogo
@@ -80,16 +83,16 @@ export default function Login() {
             placeholder="Company code (e.g. SAN-ANT)"
             spellCheck={false}
             autoCapitalize="characters"
-            className="border-[1.5px] border-stroke rounded-[14px] px-[15px] py-[13px] text-sm text-ink bg-white outline-none focus:border-brand placeholder:text-faint uppercase"
+            className="border border-stroke rounded-[14px] px-[15px] py-[14px] text-sm text-ink bg-white shadow-[0_4px_10px_rgba(10,10,9,0.08)] outline-none focus:border-brand placeholder:text-faint uppercase"
           />
           <input
             type="email"
             value={email}
             onChange={(e) => { setEmail(e.target.value); setError('') }}
-            placeholder="you@company.ph"
+            placeholder="Username (work email)"
             spellCheck={false}
             autoCapitalize="none"
-            className="border-[1.5px] border-stroke rounded-[14px] px-[15px] py-[13px] text-sm text-ink bg-white outline-none focus:border-brand placeholder:text-faint"
+            className="border border-stroke rounded-[14px] px-[15px] py-[14px] text-sm text-ink bg-white shadow-[0_4px_10px_rgba(10,10,9,0.08)] outline-none focus:border-brand placeholder:text-faint"
           />
         </div>
 
@@ -97,10 +100,10 @@ export default function Login() {
           {Array.from({ length: 6 }).map((_, i) => (
             <div
               key={i}
-              className="w-[14px] h-[14px] rounded-full"
+              className="w-[15px] h-[15px] rounded-full transition-colors"
               style={{
-                background: i < pin.length ? '#2563eb' : 'transparent',
-                border: i < pin.length ? 'none' : '1.5px solid #c2c2bd',
+                background: i < pin.length ? DOT_COLORS[i] : 'rgba(255,255,255,0.55)',
+                border: i < pin.length ? 'none' : '1.5px solid rgba(120,120,111,0.5)',
               }}
             />
           ))}
@@ -117,8 +120,8 @@ export default function Login() {
                 disabled={busy}
                 className={
                   k === 'del'
-                    ? 'h-[58px] border-none rounded-2xl bg-transparent text-xl text-muted disabled:opacity-50'
-                    : 'h-[58px] border-none rounded-2xl bg-white text-[23px] font-semibold shadow-[0_1px_2px_rgba(10,10,9,0.06)] active:scale-95 transition-transform disabled:opacity-50'
+                    ? 'h-[58px] border-none rounded-2xl bg-transparent text-xl text-ink/70 disabled:opacity-50'
+                    : 'h-[58px] border-none rounded-2xl bg-white text-[23px] font-semibold shadow-[0_4px_10px_rgba(10,10,9,0.12)] active:scale-95 transition-transform disabled:opacity-50'
                 }
               >
                 {k === 'del' ? '⌫' : k}
@@ -127,8 +130,8 @@ export default function Login() {
           )}
         </div>
 
-        <div className="text-center text-xs mt-[18px] min-h-[18px]" style={{ color: error ? '#e04444' : '#9b9b96' }}>
-          {busy ? 'Verifying…' : error || 'Enter your company email and 6-digit PIN'}
+        <div className="text-center text-xs mt-[18px] min-h-[18px] font-medium" style={{ color: error ? '#fecaca' : 'rgba(255,255,255,0.85)' }}>
+          {busy ? 'Verifying…' : error || 'Enter your company code, username & 6-digit PIN'}
         </div>
       </div>
     </PhoneFrame>
