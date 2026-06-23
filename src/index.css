@@ -91,3 +91,58 @@ body {
 .animate-toastIn {
   animation: toastIn 0.25s ease;
 }
+
+/* Printing: hide the admin chrome (sidebar / topbar / nav) and let the
+   payroll / payslip page take the full page. Browsers' "Save as PDF"
+   uses the same rules, so the same look applies to downloaded PDFs. */
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 14mm;
+  }
+  html, body, #root {
+    background: #ffffff !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+  /* hide app chrome */
+  .print-hide,
+  aside,
+  nav,
+  header.site-header {
+    display: none !important;
+  }
+  /* hide non-printable areas using the utility class */
+  .print\:hidden {
+    display: none !important;
+  }
+  /* override fixed positioning so the printable surface flows naturally */
+  .h-\[100dvh\] {
+    height: auto !important;
+  }
+  .overflow-hidden {
+    overflow: visible !important;
+  }
+  /* make hidden grids show in print */
+  .print\:block { display: block !important; }
+  .print\:flex { display: flex !important; }
+  .print\:grid { display: grid !important; }
+  /* strip card shadows and colors so PDFs print cleanly on B/W printers */
+  #payroll-printable, #payslip-printable {
+    color: #000 !important;
+  }
+  #payroll-printable .bg-ink,
+  #payslip-printable .bg-ink {
+    background: #ffffff !important;
+    color: #000 !important;
+    border: 1px solid #e5e7eb !important;
+  }
+  #payroll-printable .text-\[\#ff9963\],
+  #payslip-printable .text-\[\#ff9963\] {
+    color: #000 !important;
+  }
+  #payslip-printable .text-white\/60,
+  #payslip-printable .text-white\/45 {
+    color: #4b5563 !important;
+  }
+}

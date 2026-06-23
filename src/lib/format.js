@@ -1,9 +1,12 @@
 export const peso = (n) =>
-  '₱ ' +
-  Number(n || 0).toLocaleString('en-PH', {
+  '$' +
+  Number(n || 0).toLocaleString('en-US', {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   })
+
+// Friendly alias; new code should prefer this name.
+export const money = peso
 
 // "2026-06-20T08:02:00+08:00" -> "8:02 AM" (in PH time)
 export const timePH = (iso) => {

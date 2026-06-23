@@ -55,7 +55,7 @@ export default function Employees() {
               </div>
             </div>
             <div className="text-ink-soft">{e.position}</div>
-            <div className="tnum text-ink-soft">{Number(e.daily_rate) > 0 ? `₱${Number(e.daily_rate)}` : '—'}</div>
+            <div className="tnum text-ink-soft">{Number(e.daily_rate) > 0 ? `$${Number(e.daily_rate)}` : '—'}</div>
             <div><Pill kind={e.today === 'on_leave' ? 'on_leave' : e.status} /></div>
           </button>
         ))}

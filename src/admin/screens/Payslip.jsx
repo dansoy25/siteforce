@@ -32,18 +32,21 @@ export default function Payslip() {
   )
 
   return (
-    <div className="animate-fadeIn">
-      <div className="flex justify-end gap-[10px] mb-4">
-        <button onClick={() => flash('Payslip PDF downloaded')} className="border-none bg-orange text-white text-sm font-semibold px-4 py-2.5 rounded-xl">
+    <div className="animate-fadeIn" id="payslip-printable">
+      <div className="flex justify-end gap-[10px] mb-4 print:hidden">
+        <button onClick={() => window.print()} className="border-[1.5px] border-stroke bg-white text-ink-soft text-sm font-semibold px-4 py-2.5 rounded-xl inline-flex items-center gap-2">
+          🖨 Print
+        </button>
+        <button onClick={() => window.print()} className="border-none bg-orange text-white text-sm font-semibold px-4 py-2.5 rounded-xl">
           Download PDF
         </button>
       </div>
 
       <div className="flex justify-center">
-        <div className="w-full max-w-[680px] bg-white shadow-[0_6px_16px_rgba(10,10,9,0.12)] p-7 sm:p-10 rounded-md">
+        <div className="w-full max-w-[680px] bg-white shadow-[0_6px_16px_rgba(10,10,9,0.12)] print:shadow-none p-7 sm:p-10 rounded-md">
           <div className="flex justify-between items-start pb-[18px] border-b-2 border-ink">
             <div className="flex gap-3 items-center">
-              <div className="w-[42px] h-[42px] rounded-[11px] bg-orange flex items-center justify-center text-white text-xl font-extrabold">S</div>
+              <img src={import.meta.env.BASE_URL + 'logo.png'} alt="" className="h-12 w-auto" />
               <div>
                 <div className="text-[17px] font-extrabold">Jaway Construction Services Inc.</div>
                 <div className="text-xs text-muted">Brgy. Mandurriao, Iloilo City · TIN 004-217-880-000</div>

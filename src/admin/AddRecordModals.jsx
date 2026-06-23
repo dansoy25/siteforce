@@ -86,7 +86,7 @@ export function AddEmployeeModal({ profile, sites, onClose, onDone, flash }) {
       <Field label="Email"><input className={inputCls} type="email" value={f.email} onChange={set('email')} placeholder="juan@company.ph" autoCapitalize="none" /></Field>
       <div className="grid grid-cols-2 gap-3">
         <Field label="Position"><input className={inputCls} value={f.position} onChange={set('position')} placeholder="Mason" /></Field>
-        <Field label="Daily rate (₱)"><input className={inputCls} type="number" value={f.daily_rate} onChange={set('daily_rate')} placeholder="720" /></Field>
+        <Field label="Daily rate ($)"><input className={inputCls} type="number" value={f.daily_rate} onChange={set('daily_rate')} placeholder="720" /></Field>
       </div>
       <div className="grid grid-cols-2 gap-3">
         <Field label="Site">

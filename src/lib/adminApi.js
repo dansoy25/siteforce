@@ -206,10 +206,19 @@ export async function fetchPayrollRun() {
   return { run, rows, totals, count: rows.length }
 }
 
-export async function lockPayrollRun(id) {
+export async function lockPayrollRun(id, dates) {
+  const patch = { status: 'locked', locked_at: new Date().toISOString() }
+  if (dates?.from) patch.period_start = dates.from
+  if (dates?.to) patch.period_end = dates.to
+  const { error } = await supabase.from('payroll_runs').update(patch).eq('id', id)
+  if (error) throw error
+}
+
+// Update the draft period before locking, so the dashboard preview reflects it.
+export async function updatePayrollPeriod(id, from, to) {
   const { error } = await supabase
     .from('payroll_runs')
-    .update({ status: 'locked', locked_at: new Date().toISOString() })
+    .update({ period_start: from, period_end: to })
     .eq('id', id)
   if (error) throw error
 }
