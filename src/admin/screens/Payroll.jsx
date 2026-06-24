@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useAdmin } from '../AdminShell'
-import { fetchPayrollRun, lockPayrollRun, updatePayrollPeriod } from '../../lib/adminApi'
+import { fetchPayrollRun, lockPayrollRun, updatePayrollPeriod, unlockPayrollRun } from '../../lib/adminApi'
 import { logActivity } from '../../lib/api'
 import { Card, Avatar } from '../ui'
 import { peso, longDate } from '../../lib/format'
@@ -126,13 +126,20 @@ export default function Payroll() {
             className="border-[1.5px] border-stroke rounded-[10px] px-3 py-[8px] text-sm tnum outline-none focus:border-brand disabled:bg-line"
           />
         </div>
-        {!locked && (
+        {!locked ? (
           <button
             onClick={saveDates}
             disabled={savingDates}
             className="border-[1.5px] border-stroke bg-white text-ink-soft text-sm font-semibold px-4 py-[8px] rounded-[10px] disabled:opacity-60"
           >
             {savingDates ? 'Saving…' : 'Save dates'}
+          </button>
+        ) : (
+          <button
+            onClick={async () => { await unlockPayrollRun(data.run.id); setLocked(false); flash('Run unlocked — you can edit the period') }}
+            className="border-[1.5px] border-stroke bg-white text-ink-soft text-sm font-semibold px-4 py-[8px] rounded-[10px]"
+          >
+            ✎ Edit dates
           </button>
         )}
         <div className="flex-1" />

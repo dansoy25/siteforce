@@ -3,11 +3,16 @@ import { fetchTodayAttendance, fetchSites, fetchEmployees } from '../../lib/admi
 import { Card, Avatar, Pill } from '../ui'
 import { timePH } from '../../lib/format'
 
+const STATUS_LABELS = { present: 'Present', late: 'Late', on_leave: 'On leave', absent: 'Absent', ongoing: 'Present' }
+
 export default function Attendance() {
   const [tab, setTab] = useState('board')
   const [att, setAtt] = useState([])
   const [employees, setEmployees] = useState([])
   const [sites, setSites] = useState([])
+  const [siteFilter, setSiteFilter] = useState('all')
+  const [statusFilter, setStatusFilter] = useState('all')
+  const [search, setSearch] = useState('')
 
   useEffect(() => {
     fetchTodayAttendance().then(setAtt).catch(() => setAtt([]))
@@ -40,7 +45,33 @@ export default function Attendance() {
     })
     .sort((a, b) => (b.clockIn ? 1 : 0) - (a.clockIn ? 1 : 0))
 
-  const exceptions = rows.filter((r) => r.flag).length
+  // Apply Site / Status / Search filters.
+  const norm = (s) => (s === 'ongoing' ? 'present' : s)
+  const filtered = rows.filter((r) => {
+    if (siteFilter !== 'all' && r.site !== siteFilter) return false
+    if (statusFilter !== 'all' && norm(r.status) !== statusFilter) return false
+    if (search.trim() && !r.name.toLowerCase().includes(search.trim().toLowerCase())) return false
+    return true
+  })
+
+  const exceptions = filtered.filter((r) => r.flag).length
+
+  function exportCsv() {
+    const head = ['Employee', 'Position', 'Site', 'Time in', 'Time out', 'Hours', 'Status', 'Flag']
+    const lines = filtered.map((r) => [
+      r.name, r.position || '', r.site || '',
+      r.clockIn ? timePH(r.clockIn) : '', r.clockOut ? timePH(r.clockOut) : '',
+      r.hours.toFixed(1), STATUS_LABELS[r.status] || r.status, r.flag || '',
+    ].map((c) => `"${String(c).replace(/"/g, '""')}"`).join(','))
+    const csv = [head.join(','), ...lines].join('\n')
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `attendance-${new Date().toISOString().slice(0, 10)}.csv`
+    a.click()
+    URL.revokeObjectURL(url)
+  }
 
   const Tab = ({ id, children }) => (
     <button
@@ -59,7 +90,7 @@ export default function Attendance() {
         <span className="inline-flex items-center gap-2 bg-green-tint text-green text-xs font-semibold px-3 py-1 rounded-full">
           <span className="w-2 h-2 rounded-full bg-green animate-pulse" /> Live
         </span>
-        <button className="inline-flex items-center gap-2 border border-stroke bg-white text-ink-soft text-sm font-semibold px-4 py-2 rounded-xl">
+        <button onClick={exportCsv} className="inline-flex items-center gap-2 border border-stroke bg-white text-ink-soft text-sm font-semibold px-4 py-2 rounded-xl hover:bg-line">
           ↓ Export
         </button>
       </div>
@@ -71,9 +102,31 @@ export default function Attendance() {
           <Tab id="map">Map</Tab>
         </div>
         <div className="flex-1" />
-        <span className="inline-flex items-center gap-2 bg-white border border-stroke rounded-[10px] px-[14px] py-[8px] text-[13px] text-ink-soft">Site: All ▾</span>
-        <span className="inline-flex items-center gap-2 bg-white border border-stroke rounded-[10px] px-[14px] py-[8px] text-[13px] text-ink-soft">Status ▾</span>
-        <span className="hidden md:inline-flex items-center gap-2 bg-white border border-stroke rounded-[10px] px-[14px] py-[8px] text-[13px] text-faint w-[150px]">⌕ Search</span>
+        <select
+          value={siteFilter}
+          onChange={(e) => setSiteFilter(e.target.value)}
+          className="bg-white border border-stroke rounded-[10px] px-[12px] py-[8px] text-[13px] text-ink-soft outline-none focus:border-brand"
+        >
+          <option value="all">Site: All</option>
+          {sites.map((s) => <option key={s.id} value={s.name}>{s.name}</option>)}
+        </select>
+        <select
+          value={statusFilter}
+          onChange={(e) => setStatusFilter(e.target.value)}
+          className="bg-white border border-stroke rounded-[10px] px-[12px] py-[8px] text-[13px] text-ink-soft outline-none focus:border-brand"
+        >
+          <option value="all">Status: All</option>
+          <option value="present">Present</option>
+          <option value="late">Late</option>
+          <option value="on_leave">On leave</option>
+          <option value="absent">Absent</option>
+        </select>
+        <input
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="⌕ Search"
+          className="hidden md:inline-flex bg-white border border-stroke rounded-[10px] px-[14px] py-[8px] text-[13px] text-ink-soft outline-none focus:border-brand w-[150px] placeholder:text-faint"
+        />
       </div>
 
       {tab === 'board' && (
@@ -93,7 +146,7 @@ export default function Attendance() {
             <div className="hidden md:grid grid-cols-[2fr_1.3fr_1.2fr_0.8fr_1fr_1fr] px-5 py-[13px] bg-[#fafaf9] text-[11px] font-semibold tracking-wide uppercase text-muted border-b border-[#eaeae7]">
               <div>Employee</div><div>Site</div><div>Time in / out</div><div>Hours</div><div>Status</div><div>Flag</div>
             </div>
-            {rows.map((r) => {
+            {filtered.map((r) => {
               const highlight = !!r.flag
               return (
                 <div
@@ -122,9 +175,9 @@ export default function Attendance() {
                 </div>
               )
             })}
-            {rows.length === 0 && <div className="p-6 text-sm text-muted">No employees yet.</div>}
+            {filtered.length === 0 && <div className="p-6 text-sm text-muted">No employees match these filters.</div>}
             <div className="flex justify-between items-center px-5 py-3 text-[13px] text-muted">
-              <div>Showing {rows.length} · updated {timePH(new Date().toISOString())}</div>
+              <div>Showing {filtered.length} of {rows.length} · updated {timePH(new Date().toISOString())}</div>
               <div className="flex gap-1">
                 <span className="w-7 h-7 rounded-lg border border-stroke flex items-center justify-center">‹</span>
                 <span className="w-7 h-7 rounded-lg bg-brand text-white flex items-center justify-center font-semibold">1</span>

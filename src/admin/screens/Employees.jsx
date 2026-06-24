@@ -13,7 +13,13 @@ export default function Employees() {
   const [selected, setSelected] = useState(null)
   const [uploading, setUploading] = useState(false)
   const [showAdd, setShowAdd] = useState(false)
+  const [search, setSearch] = useState('')
   const fileRef = useRef(null)
+
+  const q = search.trim().toLowerCase()
+  const visible = q
+    ? rows.filter((e) => e.full_name.toLowerCase().includes(q) || (e.employee_code || '').toLowerCase().includes(q) || (e.position || '').toLowerCase().includes(q))
+    : rows
 
   const load = () =>
     fetchEmployees().then((list) => {
@@ -44,7 +50,12 @@ export default function Employees() {
       <div className="flex flex-wrap items-center gap-3 mb-4">
         <div className="text-[15px] font-bold">{rows.length} total</div>
         <div className="flex-1" />
-        <span className="hidden md:inline-flex items-center gap-2 border border-stroke rounded-xl px-[14px] py-2 text-[13px] text-faint w-[220px]">⌕ Search…</span>
+        <input
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="⌕ Search…"
+          className="hidden md:inline-flex border border-stroke rounded-xl px-[14px] py-2 text-[13px] outline-none focus:border-brand placeholder:text-faint w-[220px]"
+        />
         <button onClick={() => setShowAdd(true)} className="border-none bg-brand text-white text-sm font-semibold px-4 py-2 rounded-xl">+ Add</button>
       </div>
 
@@ -53,7 +64,7 @@ export default function Employees() {
         <div className="hidden sm:grid grid-cols-[2fr_1.2fr_1fr_1fr] px-[22px] py-[13px] bg-[#fafaf9] text-[11px] font-semibold tracking-wide uppercase text-muted border-b border-[#eaeae7]">
           <div>Name</div><div>Role</div><div>Rate</div><div>Status</div>
         </div>
-        {rows.map((e) => (
+        {visible.map((e) => (
           <button
             key={e.id}
             onClick={() => setSelected(e)}

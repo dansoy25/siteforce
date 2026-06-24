@@ -34,6 +34,7 @@ export default function Projects() {
   const [projects, setProjects] = useState([])
   const [sites, setSites] = useState([])
   const [filter, setFilter] = useState('all')
+  const [search, setSearch] = useState('')
   const [showAdd, setShowAdd] = useState(false)
 
   const load = () => fetchProjects().then(setProjects).catch(() => setProjects([]))
@@ -45,7 +46,10 @@ export default function Projects() {
     on_hold: projects.filter((p) => p.status === 'on_hold').length,
     completed: projects.filter((p) => p.status === 'completed').length,
   }
-  const shown = filter === 'all' ? projects : projects.filter((p) => p.status === filter)
+  const q = search.trim().toLowerCase()
+  const shown = projects
+    .filter((p) => filter === 'all' || p.status === filter)
+    .filter((p) => !q || p.name.toLowerCase().includes(q) || (p.location || '').toLowerCase().includes(q))
 
   const Chip = ({ id, label }) => (
     <button
@@ -72,6 +76,12 @@ export default function Projects() {
         <Chip id="on_hold" label="On hold" />
         <Chip id="completed" label="Completed" />
         <div className="flex-1" />
+        <input
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="⌕ Search projects…"
+          className="hidden md:inline-flex border border-stroke rounded-xl px-[14px] py-2 text-[13px] outline-none focus:border-brand placeholder:text-faint w-[200px]"
+        />
         <button
           onClick={() => setShowAdd(true)}
           className="border-none bg-brand text-white text-sm font-semibold px-4 py-2 rounded-xl"

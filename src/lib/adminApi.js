@@ -232,6 +232,15 @@ export async function lockPayrollRun(id, dates) {
   if (error) throw error
 }
 
+// Re-open a locked run so the period can be edited again.
+export async function unlockPayrollRun(id) {
+  const { error } = await supabase
+    .from('payroll_runs')
+    .update({ status: 'draft', locked_at: null })
+    .eq('id', id)
+  if (error) throw error
+}
+
 // Update the draft period before locking, so the dashboard preview reflects it.
 export async function updatePayrollPeriod(id, from, to) {
   const { error } = await supabase

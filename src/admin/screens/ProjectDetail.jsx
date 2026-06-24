@@ -14,7 +14,7 @@ function StatBox({ value, label }) {
 }
 
 export default function ProjectDetail() {
-  const { params, navigate } = useAdmin()
+  const { params, navigate, flash } = useAdmin()
   const [data, setData] = useState(null)
 
   useEffect(() => {
@@ -47,7 +47,7 @@ export default function ProjectDetail() {
             {project.status === 'active' ? 'Active' : project.status === 'on_hold' ? 'On hold' : 'Completed'}
           </Pill>
         </div>
-        <button className="border border-stroke bg-white text-ink-soft text-sm font-semibold px-4 py-2 rounded-xl">Edit</button>
+        <button onClick={() => flash('Project editing coming soon')} className="border border-stroke bg-white text-ink-soft text-sm font-semibold px-4 py-2 rounded-xl">Edit</button>
       </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-[14px] mb-4">
@@ -61,7 +61,7 @@ export default function ProjectDetail() {
         <Card className="overflow-hidden">
           <div className="px-5 py-4 border-b border-line flex justify-between items-center">
             <span className="text-[15px] font-bold">Assigned members</span>
-            <button className="border-none bg-transparent text-brand text-[13px] font-semibold">Manage</button>
+            <button onClick={() => navigate('employees')} className="border-none bg-transparent text-brand text-[13px] font-semibold">Manage</button>
           </div>
           {members.map((m) => (
             <div key={m.id} className="flex items-center gap-3 px-5 py-3 border-b border-line last:border-0">

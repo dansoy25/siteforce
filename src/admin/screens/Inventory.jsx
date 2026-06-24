@@ -11,13 +11,18 @@ export default function Inventory() {
   const [items, setItems] = useState([])
   const [tab, setTab] = useState('all')
   const [showAdd, setShowAdd] = useState(false)
+  const [search, setSearch] = useState('')
 
   const load = () => fetchInventory().then(setItems).catch(() => setItems([]))
   useEffect(() => { load() }, [])
 
   const lowOrCritical = items.filter((i) => i.status === 'low' || i.status === 'critical')
-  const shown =
+  const byTab =
     tab === 'all' ? items : tab === 'low' ? items.filter((i) => i.status === 'low') : items.filter((i) => i.status === 'critical')
+  const q = search.trim().toLowerCase()
+  const shown = q
+    ? byTab.filter((i) => i.name.toLowerCase().includes(q) || (i.sku || '').toLowerCase().includes(q))
+    : byTab
 
   const Tab = ({ id, label }) => (
     <button
@@ -32,7 +37,7 @@ export default function Inventory() {
   return (
     <div className="animate-fadeIn">
       <div className="flex justify-end gap-[10px] mb-4">
-        <button className="border border-stroke bg-white text-ink-soft text-sm font-semibold px-4 py-2 rounded-xl">Stock in / out</button>
+        <button onClick={() => setShowAdd(true)} className="border border-stroke bg-white text-ink-soft text-sm font-semibold px-4 py-2 rounded-xl">Stock in / out</button>
         <button onClick={() => setShowAdd(true)} className="border-none bg-brand text-white text-sm font-semibold px-4 py-2 rounded-xl">+ Add item</button>
       </div>
 
@@ -42,7 +47,7 @@ export default function Inventory() {
           <span className="text-[13px] text-[#842b12] flex-1">
             {lowOrCritical.length} item{lowOrCritical.length > 1 ? 's' : ''} below reorder level — {lowOrCritical.map((i) => i.name).join(', ')}.
           </span>
-          <span className="text-[13px] font-semibold text-brand whitespace-nowrap">Reorder →</span>
+          <button onClick={() => flash('Reorder request noted for low-stock items')} className="border-none bg-transparent text-[13px] font-semibold text-brand whitespace-nowrap">Reorder →</button>
         </div>
       )}
 
@@ -54,7 +59,12 @@ export default function Inventory() {
             <Tab id="out" label="Out" />
           </div>
           <div className="flex-1" />
-          <span className="hidden md:inline-flex items-center gap-2 border border-stroke rounded-[10px] px-[14px] py-[7px] text-[13px] text-faint">⌕ Search SKU</span>
+          <input
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="⌕ Search SKU"
+            className="hidden md:inline-flex border border-stroke rounded-[10px] px-[14px] py-[7px] text-[13px] outline-none focus:border-brand placeholder:text-faint w-[180px]"
+          />
         </div>
         <div className="hidden sm:grid grid-cols-[2.2fr_1.2fr_1.3fr_1.4fr_1fr] px-5 py-[13px] bg-[#fafaf9] text-[11px] font-semibold tracking-wide uppercase text-muted border-b border-[#eaeae7]">
           <div>Item</div><div>SKU</div><div>Stock level</div><div>Location</div><div>Status</div>
